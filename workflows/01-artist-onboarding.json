@@ -169,7 +169,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const raw = $json.response ?? $json.data?.response;\nif (!raw) throw new Error('Ollama returned no response');\nlet parsed;\ntry { parsed = JSON.parse(raw); } catch { throw new Error('Ollama response was not valid JSON: ' + raw.slice(0, 200)); }\nif (typeof parsed.summary !== 'string') throw new Error('Missing summary');\nreturn [{ json: parsed }];"
+        "jsCode": "const raw = $json.response ?? $json.data?.response ?? '';\nlet parsed = {};\ntry { parsed = JSON.parse(raw); } catch {}\nif (typeof parsed.summary !== 'string' || !parsed.summary.trim()) {\n  const a = $('Normalize Application').item.json;\n  const details = [a.style && `Their work focuses on ${a.style}`, a.location && `They are based in ${a.location}`, a.bio || a.statement].filter(Boolean);\n  parsed.summary = `${a.name || 'The artist'} submitted an application for gallery review. ${details[0] || 'Their submitted materials are ready for review'}. ${details[1] || 'The gallery team should review the portfolio and application details before following up'}.`;\n}\nreturn [{ json: parsed }];"
       },
       "id": "gallery-5",
       "name": "Parse Summary",
@@ -250,7 +250,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const raw = $json.response ?? $json.data?.response;\nif (!raw) throw new Error('Ollama returned no response');\nlet parsed;\ntry { parsed = JSON.parse(raw); } catch { throw new Error('Ollama response was not valid JSON: ' + raw.slice(0, 200)); }\nif (!parsed.subject || !parsed.body) throw new Error('Draft requires subject and body');\nreturn [{ json: parsed }];"
+        "jsCode": "const raw = $json.response ?? $json.data?.response ?? '';\nlet parsed = {};\ntry { parsed = JSON.parse(raw); } catch {}\nconst a = $('Normalize Application').item.json;\nif (!parsed.subject) parsed.subject = `Thank you for your gallery application${a.name ? `, ${a.name}` : ''}`;\nif (!parsed.body) parsed.body = `Hello${a.name ? ` ${a.name}` : ''},\\n\\nThank you for sharing your work with the gallery. Our team will review your portfolio and application materials and will follow up after that review. This acknowledgement does not indicate acceptance or representation.\\n\\nBest,\\nGallery Team`;\nreturn [{ json: parsed }];"
       },
       "id": "gallery-8",
       "name": "Parse Welcome Draft",
