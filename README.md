@@ -1,5 +1,18 @@
 # Gallery AI Automation
 
+## Lovable website
+
+The editable recreation of the published Lovable website lives in
+[`lovable-site/`](./lovable-site/). It is a responsive Vite/React frontend with
+the agent carousel, workflow explanation, contact form, and Gallery AI
+assistant.
+
+```bash
+cd lovable-site
+npm install
+npm run dev
+```
+
 A self-hosted, human-in-the-loop starter system for a gallery. Google Sheets is
 the shared data hub, four n8n workflows are the agents, Ollama/Qwen 3 is the
 local language model, and Gmail Drafts is the owner's review interface.
