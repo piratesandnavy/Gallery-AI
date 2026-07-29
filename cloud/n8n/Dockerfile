@@ -9,5 +9,7 @@ RUN mkdir -p /opt/gallery-ai/cloud-workflows \
     && chmod +x /usr/local/bin/gallery-n8n-start \
     && chown -R node:node /opt/gallery-ai
 
-USER node
+# Railway volumes are initially owned by root. Keep the startup process as root so
+# n8n can initialize and persist its SQLite database on /home/node/.n8n.
+USER root
 ENTRYPOINT ["tini", "--", "/usr/local/bin/gallery-n8n-start"]
