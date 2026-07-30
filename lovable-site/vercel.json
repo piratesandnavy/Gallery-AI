@@ -12,7 +12,7 @@
     },
     {
       "src": "/artist-application-submit.js",
-      "dest": "/artist-application-submit.js"
+      "dest": "/assets/artist-application-submit.js"
     },
     {
       "src": "/",
