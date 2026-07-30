@@ -3,6 +3,10 @@
   "outputDirectory": "dist/client",
   "routes": [
     {
+      "src": "/api/contact",
+      "dest": "/api/contact"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/proxy?path=$1"
     }
