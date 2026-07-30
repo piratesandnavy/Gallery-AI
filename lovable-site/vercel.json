@@ -23,6 +23,10 @@
       "dest": "/live-artist-application.html"
     },
     {
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "/assets/$1"
     },
