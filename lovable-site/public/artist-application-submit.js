@@ -1,7 +1,12 @@
 (function () {
   const byId = (id) => document.getElementById(id);
-  const form = byId("aa-name")?.closest("form");
-  if (!form) return;
+  const originalForm = byId("aa-name")?.closest("form");
+  if (!originalForm) return;
+
+  // The static snapshot includes an older local-only submit listener.
+  // Replace the form node so the public form has one authoritative handler.
+  const form = originalForm.cloneNode(true);
+  originalForm.replaceWith(form);
 
   const button = form.querySelector('button[type="submit"]');
   const buttonText = button.textContent;
