@@ -1,6 +1,7 @@
 FROM n8nio/n8n:2.32.6
 
 USER root
+ENV N8N_USER_FOLDER=/home/node/.n8n
 COPY workflows /opt/gallery-ai/source-workflows
 COPY cloud/n8n/start.sh /usr/local/bin/gallery-n8n-start
 RUN mkdir -p /opt/gallery-ai/cloud-workflows \
