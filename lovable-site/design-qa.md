@@ -1,45 +1,65 @@
-# Design QA
+# Gallery AI design QA
 
-- Source visual truth: `/Users/siddharthmanchanda/Documents/Codex/2026-07-29/https-www-lemuseedumonde-com-2/work/source-desktop.png`
-- Implementation screenshot: `/Users/siddharthmanchanda/Documents/Codex/2026-07-29/https-www-lemuseedumonde-com-2/work/implementation-desktop.png`
-- Source viewport: 1440 × 900 CSS px, density 1
-- Implementation viewport: 1280 × 900 CSS px, density 1
-- State: desktop landing page, first agent selected, assistant closed
+- Source visual truth: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/source-capture/source-desktop.png`
+- Implementation screenshot: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/source-capture/implementation-desktop-top.png`
+- Combined comparison: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/source-capture/desktop-comparison.png`
+- Desktop viewport: 1440 × 900 CSS px at device scale 1
+- Mobile viewport: 390 × 844 CSS px at device scale 1
+- Source pixels: 1440 × 900 for the normalized top viewport
+- Implementation pixels: 1440 × 900 for the normalized top viewport
+- State: initial landing-page state
 
 ## Full-view comparison
 
-The source and implementation use the same dark editorial structure, Instrument Serif display typography, small monospaced gold eyebrow labels, centered hero hierarchy, gallery imagery, bordered sections, workflow sequence, privacy statement, contact form, and floating assistant. The source browser’s animated Three.js canvas produces repeated fixed-canvas segments in full-page screenshots, so layout fidelity was judged from the visible desktop state plus DOM evidence.
+The implementation preserves the source's black gallery atmosphere, warm gold
+accent, Instrument Serif display typography, compact mono labels, centered hero,
+agent imagery, and restrained border treatment. The source's animated WebGL
+tunnel is represented by the existing version-controlled tunnel treatment so
+the page no longer depends on the Lovable runtime.
 
-## Focused comparison
+## Focused evidence
 
-The hero, connected-agent carousel, and workflow rows were reviewed as focused regions because they carry the page’s distinctive hierarchy. The implementation preserves the same copy, image subjects, card overlays, active-card emphasis, button hierarchy, subdued warm palette, and section rhythm.
+The hero and navigation were compared at equal dimensions. The current live
+source capture renders the animated tunnel at a different animation frame, so
+the background geometry is expected to differ while the hierarchy, palette,
+typography, controls, and content remain consistent.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: Instrument Serif, DM Sans, and JetBrains Mono reproduce the display, body, and label hierarchy.
-- Spacing and layout rhythm: centered hero, editorial margins, bordered sections, carousel proportions, and responsive stacking match the source structure.
-- Colors and visual tokens: near-black, warm ivory, muted gray, and ochre-gold are consistently mapped.
-- Image quality and asset fidelity: the four agent images are locally copied source assets with source-like cropping and overlays.
-- Copy and content: all principal landing-page, workflow, privacy, contact, and assistant text is preserved.
+- Fonts and typography: Instrument Serif, DM Sans, and JetBrains Mono match the
+  source families and preserve the display/body/label hierarchy.
+- Spacing and layout rhythm: hero, navigation, workflow, module, privacy, and
+  contact regions retain the source's generous vertical rhythm. Mobile has no
+  horizontal page overflow.
+- Colors and tokens: black, warm ivory, muted grey, and gold accents match the
+  source visual system with sufficient contrast.
+- Image quality and assets: all four gallery images are local, sharp AVIF
+  assets from the source implementation; no placeholders or hotlinks are used.
+- Copy and content: the hero, four agents, five-module operating system,
+  privacy principle, contact form, and primary links are represented.
 
 ## Interaction checks
 
-- Agent cards, arrow controls, and dot navigation update the selected agent.
-- Contact form validates required fields and shows a completion state.
-- Assistant opens/closes, suggestion prompts respond, and typed questions submit.
-- Primary navigation and CTA links resolve correctly.
-- Production build and Sites worker tests pass.
+- Agent carousel advanced from Artist onboarding to Opportunity finder.
+- Gallery AI assistant opened successfully.
+- Contact form uses the repository's `/api/contact` endpoint.
+- No new browser console errors occurred during interaction checks.
+- No Lovable badge, project link, runtime proxy, or Lovable hostname remains.
 
 ## Findings
 
-No actionable P0, P1, or P2 issues remain. The recreated hero uses a lightweight perspective treatment instead of the source’s WebGL animation so the exported frontend remains self-contained.
+No actionable P0, P1, or P2 differences remain for the migration scope.
 
 ## Comparison history
 
-Initial review found no blocking layout, content, interaction, or responsive defects requiring a P0/P1/P2 iteration.
+The initial static production-bundle mirror failed client hydration. It was
+discarded. The final implementation uses maintainable React source, restores
+the current five-module content, connects the contact form directly, and
+passes browser verification without new errors.
 
 ## Follow-up polish
 
-- P3: A future iteration could port the exact WebGL tunnel shader if the original component becomes available.
+- P3: The version-controlled tunnel is intentionally lighter than the former
+  WebGL animation to avoid keeping the Lovable-generated runtime bundle.
 
 final result: passed

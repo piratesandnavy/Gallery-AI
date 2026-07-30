@@ -1,11 +1,14 @@
 # Gallery AI Automation
 
-## Lovable website
+## Gallery AI website
 
-The editable recreation of the published Lovable website lives in
-[`lovable-site/`](./lovable-site/). It is a responsive Vite/React frontend with
-the agent carousel, workflow explanation, contact form, and Gallery AI
-assistant.
+The version-controlled website lives in [`lovable-site/`](./lovable-site/).
+It is a responsive Vite/React frontend with the agent carousel, workflow
+explanation, contact form, and Gallery AI assistant.
+
+The production `/gallery-ai` route is built directly from the React source in
+`lovable-site/src/`. The old Lovable runtime proxy has been removed, so GitHub
+is now the source of truth for the page and its local gallery images.
 
 ```bash
 cd lovable-site
@@ -21,8 +24,8 @@ Client site: https://www.lemuseedumonde.com/gallery-ai
 
 Cloud workspace: https://gallery-ai-production-d094.up.railway.app/home/workflows
 
-The website in [`lovable-site/`](./lovable-site/) presents the four published
-agents and links authenticated users directly to each production workflow.
+The website presents the four published agents and links authenticated users
+directly to each production workflow.
 
 Cloud deployment guide: [`CLOUD-DEPLOYMENT.md`](CLOUD-DEPLOYMENT.md)
 
