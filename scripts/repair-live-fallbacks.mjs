@@ -11,10 +11,15 @@ if (!inputPath) {
 }
 
 const workflows = JSON.parse(fs.readFileSync(inputPath, "utf8"));
+const credentialIds = {
+  gmail: process.env.GALLERY_GMAIL_CREDENTIAL_ID,
+  sheets: process.env.GALLERY_SHEETS_CREDENTIAL_ID,
+};
 const activeIds = {
   onboarding: "mjoQ3fQc1eE3ALqx",
   opportunities: "tdb1ZbGSeIGyExKX",
   collector: "SXASSCLEd5HVQEF7",
+  weekly: "w26K1uJ7ZdB8ZN3w",
 };
 
 function workflow(id) {
@@ -375,18 +380,47 @@ notifyCollectorOwner.parameters.options = {
 };
 addLogNode(collector, "Notify Owner", [1640, 0]);
 
-for (const repaired of [onboarding, opportunities, collector]) {
+const weekly = workflow(activeIds.weekly);
+configuration(weekly);
+weekly.nodes = weekly.nodes.filter(
+  (item) => item.name !== "Upcoming Calendar Events",
+);
+weekly.connections["Read Opportunities"] = {
+  main: [[{ node: "Bundle Weekly Data", type: "main", index: 0 }]],
+};
+delete weekly.connections["Upcoming Calendar Events"];
+node(weekly, "Bundle Weekly Data").parameters.jsCode =
+  "const rows = n => $(n).all().map(x=>x.json); return [{json:{periodEnding:$now.toISODate(),artists:rows('Read Artists'),collectors:rows('Read Collectors'),artworks:rows('Read Artworks'),sales:rows('Read Sales'),opportunities:rows('Read Opportunities'),calendar:[]}}];";
+const weeklyEmail = node(weekly, "Create Weekly Report Draft");
+weeklyEmail.parameters.sendTo =
+  "={{ $('Configuration').item.json.ownerEmail }}";
+weeklyEmail.parameters.subject = "={{ $json.subject }}";
+addLogNode(weekly, "Create Weekly Report Draft", [1500, 0]);
+
+for (const repaired of [onboarding, opportunities, collector, weekly]) {
   repaired.active = true;
   repaired.versionId = crypto.randomUUID();
   repaired.updatedAt = new Date().toISOString();
   repaired.nodes.forEach((item) => {
+    if (credentialIds.gmail && item.credentials?.gmailOAuth2) {
+      item.credentials.gmailOAuth2 = {
+        id: credentialIds.gmail,
+        name: "Gmail account",
+      };
+    }
+    if (credentialIds.sheets && item.credentials?.googleSheetsOAuth2Api) {
+      item.credentials.googleSheetsOAuth2Api = {
+        id: credentialIds.sheets,
+        name: "Google Sheets account",
+      };
+    }
     if (item.parameters?.jsCode?.includes("AQ.")) {
       throw new Error(`${repaired.name}: embedded API credential remains`);
     }
   });
 }
 
-const output = [onboarding, opportunities, collector];
+const output = [onboarding, opportunities, collector, weekly];
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
 console.log(
