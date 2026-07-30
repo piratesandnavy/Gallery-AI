@@ -124,8 +124,18 @@ export default async function handler(request, response) {
           "Local Qwen AI",
           "Gmail draft"
         ];
+        const oldHeroDescription =
+          "An n8n automation system that connects gallery data, calendars, Gmail, and a locally running Qwen model to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.";
+        const newHeroDescription =
+          "An AI automation system that connects gallery data, calendars, email, and a range of private or commercial AI models to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.";
 
         function applyWorkflowCopy() {
+          Array.from(document.querySelectorAll("p")).forEach(function (paragraph) {
+            if (paragraph.textContent.trim() === oldHeroDescription) {
+              paragraph.textContent = newHeroDescription;
+            }
+          });
+
           const heading = Array.from(document.querySelectorAll("h2")).find(
             function (element) {
               return element.textContent.trim() === "One clear automation path.";
