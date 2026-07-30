@@ -4,7 +4,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "https://gallery-ai.lovable.app/$1"
+      "dest": "/api/proxy?path=$1"
     }
   ]
 }
