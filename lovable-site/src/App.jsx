@@ -36,11 +36,11 @@ const agents = [
 ];
 
 const steps = [
-  ["Google Sheets", "Where your records live", "Your artists, artworks, collectors and enquiries sit in ordinary spreadsheets. Nothing new to learn — you keep updating the sheet you already use."],
-  ["Google Calendar", "What's coming up", "Shows, studio visits, install days and submission deadlines are read from your calendar so the system knows what matters this week."],
-  ["n8n", "The automation layer", "Think of it as the wiring. It watches for a new row or a new date, then passes the right information to the right place — on a schedule or the moment something changes."],
-  ["Generation layer", "The writing and summarising", "A structured generation step prepares summaries, match notes and email drafts. The production demo includes a reliable fallback, while the system can also connect to an approved AI provider."],
-  ["Gmail draft", "You get the last word", "The finished text lands in your Gmail as a draft. You read it, edit anything you like, and press send. Nothing is sent on your behalf."],
+  ["Artist Database", "Artist profiles, artworks and collectors", "Your artists, artworks, collectors and enquiries stay in the spreadsheets you already use."],
+  ["Smart Calendar", "Exhibitions, deadlines and appointments", "Shows, studio visits, install days and deadlines are read from your calendar so nothing is missed."],
+  ["Automation Engine", "Change detection and smart workflows", "The automation layer spots a new row or date and passes the right information to the right place."],
+  ["AI Assistant", "Summaries, drafts and reports", "An approved private or commercial AI model reads what was gathered and prepares the summary or email."],
+  ["Review & Send", "Edit and send with confidence", "The finished text lands as a draft. You review it, edit it, and press send yourself."],
 ];
 
 export function App() {
@@ -49,6 +49,8 @@ export function App() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [contactError, setContactError] = useState("");
 
   function sendMessage(text = message) {
     if (!text.trim()) return;
@@ -58,6 +60,28 @@ export function App() {
         ? "Your gallery data stays under your control. The Qwen model runs locally through Ollama."
         : "Gallery AI connects your sheets, calendar, n8n workflows, local AI, and Gmail drafts. A person reviews everything before it is sent."
     );
+  }
+
+  async function submitContact(event) {
+    event.preventDefault();
+    setSending(true);
+    setContactError("");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))),
+      });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || "The enquiry could not be sent.");
+      }
+      setSent(true);
+    } catch (error) {
+      setContactError(error.message || "The enquiry could not be sent.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -80,7 +104,7 @@ export function App() {
           <div className="hero-copy">
             <p className="eyebrow">Live gallery automation</p>
             <h1>Less admin.<br /><em>More art.</em></h1>
-            <p className="lead">Four published n8n agents connect gallery data, calendars, and Gmail to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
+            <p className="lead">An AI automation system that connects gallery data, calendars, email, and private or commercial AI models to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
             <div className="actions">
               <a className="primary" href="#workflows">Explore the workflows</a>
               <a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Open Gallery AI Cloud</a>
@@ -130,9 +154,9 @@ export function App() {
         </section>
 
         <section className="section how">
-          <p className="eyebrow">How it works</p>
-          <h2>One clear automation path.</h2>
-          <p className="intro">Five parts, each with one job. Here's what each one actually does.</p>
+          <p className="eyebrow">Five connected modules</p>
+          <h2>The AI Gallery Operating System</h2>
+          <p className="intro">Five modules. One intelligent gallery.</p>
           <ol className="step-list">
             {steps.map(([title, subtitle, body], index) => (
               <li key={title}>
@@ -142,12 +166,16 @@ export function App() {
             ))}
           </ol>
           <div className="flow">{steps.map(([title], i) => <div key={title}><span>{title}</span>{i < steps.length - 1 && <b>→</b>}</div>)}</div>
+          <div className="operating-note">
+            <strong>Connected. Automated. Intelligent.</strong>
+            <span>More time for art. Less time for admin.</span>
+          </div>
         </section>
 
         <section className="privacy">
           <p className="eyebrow">Design principle</p>
           <h2>Your gallery stays in control.</h2>
-          <p>The workflows are designed for human review, use environment-based configuration, keep credentials out of the repository, and prepare Gmail drafts before client-facing communication is sent.</p>
+          <p>The workflows are designed for human review, use environment-based configuration, keep credentials out of the repository, and prepare drafts before client-facing communication is sent.</p>
         </section>
 
         <section id="contact" className="section contact">
@@ -157,12 +185,13 @@ export function App() {
             <p>Tell us a little about your gallery and how you work today. We'll get back to you with what setting this up would look like.</p>
           </div>
           {sent ? <div className="thanks"><h3>Thank you.</h3><p>Your enquiry has been prepared for the Gallery AI team.</p></div> : (
-            <form onSubmit={(event) => { event.preventDefault(); setSent(true); }}>
-              <label>Your name<input required /></label>
-              <label>Gallery<input required /></label>
-              <label>Email<input required type="email" /></label>
-              <label>What would you like to automate?<textarea rows="4" /></label>
-              <button>Send enquiry</button>
+            <form onSubmit={submitContact}>
+              <label>Your name<input name="name" required maxLength="100" /></label>
+              <label>Gallery<input name="gallery" maxLength="120" /></label>
+              <label>Email<input name="email" required type="email" maxLength="255" /></label>
+              <label>What would you like to automate?<textarea name="message" rows="4" maxLength="1000" /></label>
+              {contactError && <p className="form-error" role="alert">{contactError}</p>}
+              <button disabled={sending}>{sending ? "Sending…" : "Send enquiry"}</button>
             </form>
           )}
         </section>

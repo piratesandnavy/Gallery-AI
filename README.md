@@ -1,11 +1,24 @@
 # Gallery AI Automation
 
-## Lovable website
+## Gallery AI website
 
-The editable recreation of the published Lovable website lives in
-[`lovable-site/`](./lovable-site/). It is a responsive Vite/React frontend with
-the agent carousel, workflow explanation, contact form, and Gallery AI
-assistant.
+The version-controlled website lives in [`lovable-site/`](./lovable-site/).
+It is a responsive Vite/React frontend with the agent carousel, workflow
+explanation, contact form, and Gallery AI assistant.
+
+The complete production site is checked into `lovable-site/public/`, including
+the original WebGL tunnel animation, assistant runtime, gallery images, fonts,
+social preview, and application route. Vercel serves the version-controlled
+HTML entry points directly:
+
+- `/` → `public/live-root.html`
+- `/gallery-ai` → `public/live-gallery-ai.html`
+- `/gallery-ai/artist-application` → `public/live-artist-application.html`
+
+All required production files are stored under `public/assets/`. The Lovable
+editing badge, analytics loader, runtime proxy, externally hosted images, and
+external font files have been removed. GitHub is now the deployable source of
+truth.
 
 ```bash
 cd lovable-site
@@ -21,8 +34,8 @@ Client site: https://www.lemuseedumonde.com/gallery-ai
 
 Cloud workspace: https://gallery-ai-production-d094.up.railway.app/home/workflows
 
-The website in [`lovable-site/`](./lovable-site/) presents the four published
-agents and links authenticated users directly to each production workflow.
+The website presents the four published agents and links authenticated users
+directly to each production workflow.
 
 Cloud deployment guide: [`CLOUD-DEPLOYMENT.md`](CLOUD-DEPLOYMENT.md)
 
