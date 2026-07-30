@@ -1,4 +1,4 @@
-(function () {
+setTimeout(function () {
   const byId = (id) => document.getElementById(id);
   const originalForm = byId("aa-name")?.closest("form");
   if (!originalForm) return;
@@ -120,4 +120,4 @@
     },
     true,
   );
-})();
+}, 500);
