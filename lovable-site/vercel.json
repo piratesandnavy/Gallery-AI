@@ -7,8 +7,16 @@
       "dest": "/api/contact"
     },
     {
+      "src": "/",
+      "dest": "/live-root.html"
+    },
+    {
       "src": "/gallery-ai/?",
-      "dest": "/index.html"
+      "dest": "/live-gallery-ai.html"
+    },
+    {
+      "src": "/gallery-ai/artist-application/?",
+      "dest": "/live-artist-application.html"
     },
     {
       "src": "/assets/(.*)",
@@ -16,7 +24,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/live-root.html"
     }
   ]
 }

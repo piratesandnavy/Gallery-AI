@@ -6,9 +6,19 @@ The version-controlled website lives in [`lovable-site/`](./lovable-site/).
 It is a responsive Vite/React frontend with the agent carousel, workflow
 explanation, contact form, and Gallery AI assistant.
 
-The production `/gallery-ai` route is built directly from the React source in
-`lovable-site/src/`. The old Lovable runtime proxy has been removed, so GitHub
-is now the source of truth for the page and its local gallery images.
+The complete production site is checked into `lovable-site/public/`, including
+the original WebGL tunnel animation, assistant runtime, gallery images, fonts,
+social preview, and application route. Vercel serves the version-controlled
+HTML entry points directly:
+
+- `/` → `public/live-root.html`
+- `/gallery-ai` → `public/live-gallery-ai.html`
+- `/gallery-ai/artist-application` → `public/live-artist-application.html`
+
+All required production files are stored under `public/assets/`. The Lovable
+editing badge, analytics loader, runtime proxy, externally hosted images, and
+external font files have been removed. GitHub is now the deployable source of
+truth.
 
 ```bash
 cd lovable-site
