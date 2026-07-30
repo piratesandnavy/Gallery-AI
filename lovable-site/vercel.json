@@ -7,6 +7,14 @@
       "dest": "/api/contact"
     },
     {
+      "src": "/gallery-ai/?",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/api/proxy?path=$1"
     }
