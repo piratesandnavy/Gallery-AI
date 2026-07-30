@@ -34,6 +34,24 @@ function node(workflowValue, name) {
   return found;
 }
 
+function useStableNodeReferences(value) {
+  if (typeof value === "string") {
+    return value
+      .replaceAll("$('Configuration').item", "$('Configuration').first()")
+      .replaceAll('$("Configuration").item', '$("Configuration").first()');
+  }
+  if (Array.isArray(value)) return value.map(useStableNodeReferences);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key,
+        useStableNodeReferences(item),
+      ]),
+    );
+  }
+  return value;
+}
+
 function configuration(workflowValue) {
   const config = node(workflowValue, "Configuration");
   const assignments = config.parameters.assignments.assignments;
@@ -76,62 +94,71 @@ return [{ json: context }];`,
 const onboarding = workflow(activeIds.onboarding);
 configuration(onboarding);
 
-node(onboarding, "Artist Application Form").parameters.formFields.values = [
-  { fieldLabel: "Name", requiredField: true },
-  { fieldLabel: "Email", fieldType: "email", requiredField: true },
-  { fieldLabel: "Location", requiredField: true },
-  { fieldLabel: "Website / Instagram" },
-  { fieldLabel: "Medium", requiredField: true },
-  { fieldLabel: "Style" },
-  { fieldLabel: "Art Style / Genre" },
-  { fieldLabel: "Years Active" },
-  { fieldLabel: "Representation History" },
-  { fieldLabel: "Portfolio", fieldType: "url" },
-  { fieldLabel: "Bio", fieldType: "textarea", requiredField: true },
-  {
-    fieldLabel: "Artist Statement",
-    fieldType: "textarea",
-    requiredField: true,
+const applicationTrigger = node(onboarding, "Artist Application Form");
+applicationTrigger.name = "Website Application Webhook";
+applicationTrigger.type = "n8n-nodes-base.webhook";
+applicationTrigger.typeVersion = 2;
+applicationTrigger.parameters = {
+  httpMethod: "POST",
+  path: "gallery-ai-artist-application",
+  responseMode: "lastNode",
+  options: {
+    allowedOrigins: "https://www.lemuseedumonde.com",
   },
-  { fieldLabel: "Consent Accepted", requiredField: true },
-];
+};
+onboarding.connections["Website Application Webhook"] =
+  onboarding.connections["Artist Application Form"];
+delete onboarding.connections["Artist Application Form"];
 
 node(onboarding, "Normalize Application").parameters.assignments.assignments = [
-  ["name", "={{ $('Artist Application Form').item.json.Name || '' }}"],
-  ["email", "={{ $('Artist Application Form').item.json.Email || '' }}"],
-  ["location", "={{ $('Artist Application Form').item.json.Location || '' }}"],
+  ["submissionId", "={{ $('Website Application Webhook').first().json.body.submissionId || '' }}"],
+  ["name", "={{ $('Website Application Webhook').first().json.body.artistName || '' }}"],
+  ["email", "={{ $('Website Application Webhook').first().json.body.artistEmail || '' }}"],
+  ["location", "={{ $('Website Application Webhook').first().json.body.location || '' }}"],
   [
     "website",
-    "={{ $('Artist Application Form').item.json['Website / Instagram'] || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.websiteOrInstagram || '' }}",
   ],
   [
     "medium",
-    "={{ $('Artist Application Form').item.json.Medium || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.medium || '' }}",
   ],
   [
     "style",
-    "={{ $('Artist Application Form').item.json['Art Style / Genre'] || $('Artist Application Form').item.json.Style || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.artStyleGenre || $('Website Application Webhook').first().json.body.style || '' }}",
   ],
   [
     "yearsActive",
-    "={{ $('Artist Application Form').item.json['Years Active'] || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.yearsActive || '' }}",
   ],
   [
     "representationHistory",
-    "={{ $('Artist Application Form').item.json['Representation History'] || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.representationHistory || '' }}",
   ],
   [
     "portfolio",
-    "={{ $('Artist Application Form').item.json.Portfolio || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.portfolioLinks || '' }}",
   ],
-  ["bio", "={{ $('Artist Application Form').item.json.Bio || '' }}"],
+  ["bio", "={{ $('Website Application Webhook').first().json.body.bio || '' }}"],
   [
     "statement",
-    "={{ $('Artist Application Form').item.json['Artist Statement'] || '' }}",
+    "={{ $('Website Application Webhook').first().json.body.artistStatement || '' }}",
   ],
   [
     "consent",
-    "={{ $('Artist Application Form').item.json['Consent Accepted'] || 'Accepted via website form' }}",
+    "={{ $('Website Application Webhook').first().json.body.consent ? 'Accepted via website form' : '' }}",
+  ],
+  [
+    "submittedAt",
+    "={{ $('Website Application Webhook').first().json.body.submissionTimestamp || $now.toISO() }}",
+  ],
+  [
+    "pageUrl",
+    "={{ $('Website Application Webhook').first().json.body.pageUrl || 'https://www.lemuseedumonde.com/gallery-ai/artist-application' }}",
+  ],
+  [
+    "uploadedFiles",
+    "={{ JSON.stringify($('Website Application Webhook').first().json.body.uploadedFiles || []) }}",
   ],
 ].map(([name, value], index) => ({
   id: `application-${index + 1}`,
@@ -141,6 +168,13 @@ node(onboarding, "Normalize Application").parameters.assignments.assignments = [
 }));
 
 node(onboarding, "Summarize Artist").parameters.jsCode = `const application = $("Normalize Application").item.json;
+const requestHeaders = $("Website Application Webhook").first().json.headers || {};
+const suppliedSecret = String(requestHeaders["x-webhook-secret"] || "");
+const expectedSecret = String($env.ARTIST_APPLICATION_WEBHOOK_SECRET || "");
+if (!expectedSecret || suppliedSecret !== expectedSecret) {
+  console.log(JSON.stringify({ event: "AGENT_FAILED", agent: "Artist Onboarding", failedStep: "AUTHORIZATION", timestamp: new Date().toISOString() }));
+  throw new Error("Unauthorized artist application webhook");
+}
 console.log(JSON.stringify({ event: "FORM_RECEIVED", agent: "Artist Onboarding", timestamp: new Date().toISOString() }));
 const required = ["name", "email", "location", "medium", "bio", "statement"];
 const missing = required.filter((key) => !String(application[key] || "").trim());
@@ -163,11 +197,11 @@ for (let index = 0; index < canonical.length; index += 1) {
 }
 const applicationId = "GA-" + new Date().toISOString().slice(0, 10).replaceAll("-", "") + "-" + (hash >>> 0).toString(16).toUpperCase().padStart(8, "0");
 const state = $getWorkflowStaticData("global");
-if (state[applicationId]) {
+if (state[applicationId]?.notificationStatus === "sent") {
   console.log(JSON.stringify({ event: "AGENT_COMPLETED", agent: "Artist Onboarding", applicationId, duplicate: true, timestamp: new Date().toISOString() }));
   return [];
 }
-state[applicationId] = { receivedAt: new Date().toISOString() };
+state[applicationId] = { receivedAt: state[applicationId]?.receivedAt || new Date().toISOString(), notificationStatus: "processing" };
 console.log(JSON.stringify({ event: "VALIDATION_PASSED", agent: "Artist Onboarding", applicationId, timestamp: new Date().toISOString() }));
 const details = [
   application.medium && "Primary medium: " + application.medium,
@@ -184,6 +218,7 @@ node(onboarding, "Parse Summary").parameters.jsCode =
   'console.log(JSON.stringify({ event: "APPLICATION_SAVED_PENDING", agent: "Artist Onboarding", applicationId: $json.applicationId, timestamp: new Date().toISOString() })); return [{ json: $json }];';
 
 const saveArtist = node(onboarding, "Save Artist");
+saveArtist.onError = "continueRegularOutput";
 saveArtist.parameters.columns.value = {
   Name: "={{ $('Normalize Application').item.json.name }}",
   Email: "={{ $('Normalize Application').item.json.email }}",
@@ -220,42 +255,60 @@ applicantEmail.parameters.options = {};
 const ownerEmail = node(onboarding, "Notify Owner");
 ownerEmail.parameters.sendTo = "={{ $('Configuration').item.json.ownerEmail }}";
 ownerEmail.parameters.subject =
-  "={{ 'New Artist Application – ' + $('Normalize Application').item.json.name + ' – ' + $('Parse Summary').item.json.applicationId }}";
-ownerEmail.parameters.message = `={{ \`A new artist application has been submitted.
+  "={{ 'New Artist Application — ' + $('Normalize Application').item.json.name }}";
+ownerEmail.parameters.message = `={{ \`Hello Viktor,
+
+A new artist application has been submitted through the Le Musée du Monde website.
 
 Application ID: \${$('Parse Summary').item.json.applicationId}
 Submitted: \${$('Parse Summary').item.json.submittedAt}
 
-PERSONAL INFORMATION
-Full Name: \${$('Normalize Application').item.json.name}
+Applicant details:
+Name: \${$('Normalize Application').item.json.name}
 Email: \${$('Normalize Application').item.json.email}
 Location: \${$('Normalize Application').item.json.location}
 Website / Instagram: \${$('Normalize Application').item.json.website}
-
-ARTISTIC INFORMATION
-Primary Medium: \${$('Normalize Application').item.json.medium}
+Medium: \${$('Normalize Application').item.json.medium}
+Style: \${$('Normalize Application').item.json.style}
 Art Style / Genre: \${$('Normalize Application').item.json.style}
 Years Active: \${$('Normalize Application').item.json.yearsActive}
 Representation History: \${$('Normalize Application').item.json.representationHistory}
+Portfolio: \${$('Normalize Application').item.json.portfolio}
+Uploaded files: \${$('Normalize Application').item.json.uploadedFiles}
 
-PORTFOLIO
-Portfolio Website: \${$('Normalize Application').item.json.portfolio}
-Uploaded Files: No files were delivered by the current website endpoint. Review the portfolio links above.
+AI Artist Summary:
+\${$('Parse Summary').item.json.summary}
 
-ABOUT THE ARTIST
-Bio:
-\${$('Normalize Application').item.json.bio}
+Application record:
+Gallery AI Database / Artists sheet, application \${$('Parse Summary').item.json.applicationId}
 
-Artist Statement:
-\${$('Normalize Application').item.json.statement}
+Please review the application and follow up when appropriate.
 
-Consent Accepted: \${$('Normalize Application').item.json.consent}
-
-Review the application in the Gallery AI dashboard.\` }}`;
+Submitted from:
+\${$('Normalize Application').item.json.pageUrl}\` }}`;
 ownerEmail.parameters.options = {
   replyTo: "={{ $('Normalize Application').item.json.email }}",
 };
 addLogNode(onboarding, "Notify Owner", [1320, 0]);
+node(onboarding, "Record Delivery Result").parameters.jsCode = `const source = $input.first().json;
+const saved = $("Parse Summary").first().json;
+const state = $getWorkflowStaticData("global");
+state[saved.applicationId] = {
+  receivedAt: state[saved.applicationId]?.receivedAt || saved.submittedAt,
+  notificationStatus: "sent",
+  providerMessageId: source.id || source.messageId || source.threadId || "",
+  notifiedAt: new Date().toISOString(),
+};
+const result = {
+  ok: true,
+  submissionId: $("Normalize Application").first().json.submissionId,
+  applicationId: saved.applicationId,
+  notificationStatus: "sent",
+  providerMessageId: state[saved.applicationId].providerMessageId,
+  notifiedAt: state[saved.applicationId].notifiedAt,
+};
+console.log(JSON.stringify({ event: "AGENT_COMPLETED", agent: "Artist Onboarding", applicationId: saved.applicationId, providerMessageId: result.providerMessageId, timestamp: result.notifiedAt }));
+return [{ json: result }];`;
 
 const opportunities = workflow(activeIds.opportunities);
 configuration(opportunities);
@@ -398,6 +451,7 @@ weeklyEmail.parameters.subject = "={{ $json.subject }}";
 addLogNode(weekly, "Create Weekly Report Draft", [1500, 0]);
 
 for (const repaired of [onboarding, opportunities, collector, weekly]) {
+  repaired.nodes = repaired.nodes.map((item) => useStableNodeReferences(item));
   repaired.active = true;
   repaired.versionId = crypto.randomUUID();
   repaired.updatedAt = new Date().toISOString();
