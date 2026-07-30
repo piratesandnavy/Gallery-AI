@@ -82,9 +82,99 @@ export default async function handler(request, response) {
       }, true);
     </script>
   `;
+  const workflowCopyScript = `
+    <script>
+      (function () {
+        const updates = [
+          {
+            number: "01",
+            title: "Spreadsheet / Database",
+            subtitle: "Where your records live",
+            description: "Artists, artworks and collectors, kept in one place you already use."
+          },
+          {
+            number: "02",
+            title: "Calendar",
+            subtitle: "What's ahead",
+            description: "Shows, visits and deadlines, read straight off the calendar you already keep."
+          },
+          {
+            number: "03",
+            title: "Automation",
+            subtitle: "The connector",
+            description: "Watches for changes and passes details along."
+          },
+          {
+            number: "04",
+            title: "AI Model",
+            subtitle: "The writer",
+            description: "Turns the details into a summary or draft, running privately if you like."
+          },
+          {
+            number: "05",
+            title: "Draft / Action Item",
+            subtitle: "Your final say",
+            description: "Ready for you to review, edit, and send yourself."
+          }
+        ];
+        const oldTitles = [
+          "Google Sheets",
+          "Google Calendar",
+          "n8n",
+          "Local Qwen AI",
+          "Gmail draft"
+        ];
+
+        function applyWorkflowCopy() {
+          const heading = Array.from(document.querySelectorAll("h2")).find(
+            function (element) {
+              return element.textContent.trim() === "One clear automation path.";
+            }
+          );
+          const section = heading && heading.closest("section");
+          if (!section) return;
+
+          const cards = Array.from(section.querySelectorAll("li")).slice(0, updates.length);
+          updates.forEach(function (update, index) {
+            const card = cards[index];
+            if (!card) return;
+            const number = card.querySelector("span");
+            const title = card.querySelector("h3");
+            const paragraphs = card.querySelectorAll("p");
+            if (number && number.textContent !== update.number) number.textContent = update.number;
+            if (title && title.textContent !== update.title) title.textContent = update.title;
+            if (paragraphs[0] && paragraphs[0].textContent !== update.subtitle) {
+              paragraphs[0].textContent = update.subtitle;
+            }
+            if (paragraphs[1] && paragraphs[1].textContent !== update.description) {
+              paragraphs[1].textContent = update.description;
+            }
+          });
+
+          Array.from(section.querySelectorAll("*")).forEach(function (element) {
+            if (element.children.length) return;
+            const oldIndex = oldTitles.indexOf(element.textContent.trim());
+            if (oldIndex >= 0) element.textContent = updates[oldIndex].title;
+          });
+        }
+
+        applyWorkflowCopy();
+        document.addEventListener("DOMContentLoaded", applyWorkflowCopy);
+        const observer = new MutationObserver(applyWorkflowCopy);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        window.setTimeout(function () {
+          applyWorkflowCopy();
+          observer.disconnect();
+        }, 10000);
+      })();
+    </script>
+  `;
   response.send(
     html
       .replace("</head>", `${badgeOverride}</head>`)
-      .replace("</body>", `${contactFormScript}</body>`),
+      .replace(
+        "</body>",
+        `${contactFormScript}${workflowCopyScript}</body>`,
+      ),
   );
 }
