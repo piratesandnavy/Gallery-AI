@@ -11,6 +11,10 @@
       "dest": "/api/artist-application"
     },
     {
+      "src": "/artist-application-submit.js",
+      "dest": "/artist-application-submit.js"
+    },
+    {
       "src": "/",
       "dest": "/live-root.html"
     },
