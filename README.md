@@ -17,7 +17,12 @@ A self-hosted, human-in-the-loop starter system for a gallery. Google Sheets is
 the shared data hub, four n8n workflows are the agents, Ollama/Qwen 3 is the
 local language model, and Gmail Drafts is the owner's review interface.
 
-Project site: https://sidm13.github.io/Gallery-AI--Agent-/
+Client site: https://www.lemuseedumonde.com/gallery-ai
+
+Cloud workspace: https://gallery-ai-production-d094.up.railway.app/home/workflows
+
+The website in [`lovable-site/`](./lovable-site/) presents the four published
+agents and links authenticated users directly to each production workflow.
 
 Cloud deployment guide: [`CLOUD-DEPLOYMENT.md`](CLOUD-DEPLOYMENT.md)
 

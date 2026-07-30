@@ -4,6 +4,7 @@ const agents = [
   {
     number: "01",
     title: "Artist onboarding",
+    url: "https://gallery-ai-production-d094.up.railway.app/workflow/mjoQ3fQc1eE3ALqx",
     image: "/assets/gallery/artist-onboarding.avif",
     description:
       "Captures artist information, creates a concise AI-assisted summary, updates the database, and prepares communication.",
@@ -11,6 +12,7 @@ const agents = [
   {
     number: "02",
     title: "Opportunity finder",
+    url: "https://gallery-ai-production-d094.up.railway.app/workflow/tdb1ZbGSeIGyExKX",
     image: "/assets/gallery/opportunity-finder.avif",
     description:
       "Reviews opportunities against artist profiles and records relevant matches for follow-up.",
@@ -18,6 +20,7 @@ const agents = [
   {
     number: "03",
     title: "Collector assistant",
+    url: "https://gallery-ai-production-d094.up.railway.app/workflow/SXASSCLEd5HVQEF7",
     image: "/assets/gallery/collector-assistant.avif",
     description:
       "Uses collector preferences and available artwork data to prepare thoughtful recommendations.",
@@ -25,6 +28,7 @@ const agents = [
   {
     number: "04",
     title: "Weekly gallery report",
+    url: "https://gallery-ai-production-d094.up.railway.app/workflow/w26K1uJ7ZdB8ZN3w",
     image: "/assets/gallery/weekly-report.avif",
     description:
       "Combines Sheets and Calendar data, generates an operational summary, and creates a Gmail draft for review.",
@@ -35,7 +39,7 @@ const steps = [
   ["Google Sheets", "Where your records live", "Your artists, artworks, collectors and enquiries sit in ordinary spreadsheets. Nothing new to learn — you keep updating the sheet you already use."],
   ["Google Calendar", "What's coming up", "Shows, studio visits, install days and submission deadlines are read from your calendar so the system knows what matters this week."],
   ["n8n", "The automation layer", "Think of it as the wiring. It watches for a new row or a new date, then passes the right information to the right place — on a schedule or the moment something changes."],
-  ["Local Qwen AI", "The writing and summarising", "An AI model running on your own machine through Ollama. It reads the gathered information and writes the summary, match note or email. Because it runs locally, your gallery data never leaves your computer."],
+  ["Generation layer", "The writing and summarising", "A structured generation step prepares summaries, match notes and email drafts. The production demo includes a reliable fallback, while the system can also connect to an approved AI provider."],
   ["Gmail draft", "You get the last word", "The finished text lands in your Gmail as a draft. You read it, edit anything you like, and press send. Nothing is sent on your behalf."],
 ];
 
@@ -61,6 +65,8 @@ export function App() {
       <header className="nav">
         <a className="brand" href="#top">Gallery AI</a>
         <div className="nav-links">
+          <a href="#workflows">Agents</a>
+          <a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Cloud workspace ↗</a>
           <a href="#contact">Contact</a>
           <a href="https://github.com/piratesandnavy/Gallery-AI">View source ↗</a>
         </div>
@@ -72,12 +78,13 @@ export function App() {
             {Array.from({ length: 16 }, (_, i) => <span key={i} style={{ "--i": i }} />)}
           </div>
           <div className="hero-copy">
-            <p className="eyebrow">Private-first gallery automation</p>
+            <p className="eyebrow">Live gallery automation</p>
             <h1>Less admin.<br /><em>More art.</em></h1>
-            <p className="lead">An n8n automation system that connects gallery data, calendars, Gmail, and a locally running Qwen model to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
+            <p className="lead">Four published n8n agents connect gallery data, calendars, and Gmail to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
             <div className="actions">
               <a className="primary" href="#workflows">Explore the workflows</a>
-              <a href="https://sidm13.github.io/Gallery-AI--Agent-/run/">Run on your machine</a>
+              <a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Open Gallery AI Cloud</a>
+              <a href="https://github.com/piratesandnavy/Gallery-AI">Run on your machine</a>
               <a href="#contact">Contact us</a>
             </div>
           </div>
@@ -112,6 +119,14 @@ export function App() {
           <div className="dots">
             {agents.map((a, i) => <button aria-label={`Show ${a.title}`} className={i === active ? "selected" : ""} onClick={() => setActive(i)} key={a.title} />)}
           </div>
+          <div className="active-agent">
+            <div>
+              <span>Published agent {agents[active].number}</span>
+              <strong>{agents[active].title}</strong>
+              <small>Sign in to the Gallery AI workspace to view executions, configuration, and workflow history.</small>
+            </div>
+            <a href={agents[active].url}>Open agent ↗</a>
+          </div>
         </section>
 
         <section className="section how">
@@ -131,8 +146,8 @@ export function App() {
 
         <section className="privacy">
           <p className="eyebrow">Design principle</p>
-          <h2>Your gallery data stays under your control.</h2>
-          <p>The AI model runs locally through Ollama. The included workflows are designed for human review, use environment-based configuration, and keep credentials out of the repository.</p>
+          <h2>Your gallery stays in control.</h2>
+          <p>The workflows are designed for human review, use environment-based configuration, keep credentials out of the repository, and prepare Gmail drafts before client-facing communication is sent.</p>
         </section>
 
         <section id="contact" className="section contact">

@@ -42,6 +42,12 @@ h2 { font-size: clamp(52px, 6vw, 84px); line-height: .98; max-width: 850px; }
 .dots { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
 .dots button { width: 26px; height: 3px; border: 0; padding: 0; background: #4b4740; }
 .dots .selected { background: #d3a362; }
+.active-agent { margin: 28px 60px 0; padding: 22px 24px; border: 1px solid #393631; border-radius: 12px; background: #141210; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.active-agent div { display: grid; gap: 6px; }
+.active-agent span { color: #c79755; font: 500 10px "JetBrains Mono"; letter-spacing: .15em; text-transform: uppercase; }
+.active-agent strong { font: 400 28px "Instrument Serif"; }
+.active-agent small { color: #938d83; line-height: 1.5; }
+.active-agent a { flex: 0 0 auto; padding: 12px 18px; border-radius: 999px; background: #d2a15e; color: #17120b; font-size: 13px; font-weight: 600; }
 .how { border-top: 1px solid #2b2925; }
 .how .intro { margin: 20px 0 54px; }
 .step-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid #2b2925; }
@@ -85,6 +91,7 @@ footer { min-height: 100px; border-top: 1px solid #2b2925; width: min(1180px, ca
   .actions { flex-direction: column; align-items: stretch; max-width: 240px; margin-inline: auto; }.actions a { text-align: center; }
   .section { width: calc(100% - 30px); padding: 82px 0; } h2 { font-size: 49px; }.intro { font-size: 14px; }
   .agent-stage { display: block; }.agent-cards { min-height: auto; overflow-x: auto; align-items: stretch; scroll-snap-type: x mandatory; padding-bottom: 18px; }.agent-card, .agent-card.active { flex: 0 0 82%; height: 420px; opacity: 1; scroll-snap-align: start; }.arrow, .dots { display: none; }
+  .active-agent { margin: 20px 0 0; align-items: stretch; flex-direction: column; }.active-agent a { text-align: center; }
   .step-list li { grid-template-columns: 38px 1fr; gap: 12px; }.step-list h3 { font-size: 29px; }.step-list p { font-size: 13px; }
   .flow { overflow-x: auto; }.flow div { min-width: 130px; }
   .privacy { padding: 84px 15px; }.contact { grid-template-columns: 1fr; gap: 42px; }
