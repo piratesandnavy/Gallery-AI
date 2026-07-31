@@ -31,13 +31,3 @@
   max-width: 100%;
   object-fit: contain;
 }
-
-.gallery-integration-logo--wide {
-  flex-basis: 100%;
-  margin-inline: auto;
-}
-
-.gallery-integration-logo--wide img {
-  width: min(150px, 100%);
-  height: auto;
-}

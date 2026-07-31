@@ -3,7 +3,7 @@ const integrationLogos = {
   "Smart Calendar": [["Google Calendar", "/integrations/google-calendar.svg"], ["Calendly", "/integrations/calendly.svg"], ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"]],
   "Automation Engine": [["n8n", "/integrations/n8n.svg"], ["Zapier", "/integrations/zapier.svg"], ["Make", "/integrations/make.svg"]],
   "AI Assistant": [["OpenAI ChatGPT", "/integrations/openai.svg"], ["Anthropic Claude", "/integrations/anthropic.svg"], ["Google Gemini", "/integrations/google-gemini.svg"]],
-  "Review & Send": [["Gmail", "/integrations/gmail.svg"], ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"], ["Google Workspace", "/integrations/google-workspace.svg"]],
+  "Review & Send": [["Gmail", "/integrations/gmail.svg"], ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"], ["Google Workspace", "/integrations/google-workspace.png"]],
 };
 
 const automationEngineDescription = "The automation engine works behind the scenes to keep your gallery organized by automatically managing updates and workflows.";
@@ -16,7 +16,7 @@ function buildLogoRow(title, logos) {
 
   logos.forEach(([name, src]) => {
     const logo = document.createElement("span");
-    logo.className = `gallery-integration-logo${name === "Google Workspace" ? " gallery-integration-logo--wide" : ""}`;
+    logo.className = "gallery-integration-logo";
     logo.title = name;
 
     const image = document.createElement("img");

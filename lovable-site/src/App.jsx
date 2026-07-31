@@ -68,7 +68,7 @@ const integrations = {
   "Review & Send": [
     ["Gmail", "/integrations/gmail.svg"],
     ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"],
-    ["Google Workspace", "/integrations/google-workspace.svg"],
+    ["Google Workspace", "/integrations/google-workspace.png"],
   ],
 };
 
