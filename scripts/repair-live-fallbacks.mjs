@@ -367,7 +367,10 @@ node(opportunities, "Parse Matches").parameters.jsCode =
 node(opportunities, "Prepare Digest").parameters.jsCode = `const matches = $("Parse Matches").item.json.matches;
 if (!matches.length) {
   console.log(JSON.stringify({ event: "AGENT_COMPLETED", agent: "Opportunity Finder", result: "NO_NEW_MATCHES", timestamp: new Date().toISOString() }));
-  return [];
+  return [{ json: {
+    subject: "Gallery Opportunity Digest – no new matches",
+    body: "The Opportunity Finder completed successfully, but no strong new opportunity matches were found this week.\\n\\nThe feeds were checked and the workflow will run again on its next schedule.",
+  } }];
 }
 const lines = matches.map((match) => "• " + match.title + "\\n  Artist: " + match.matchedArtist + "\\n  Deadline: " + (match.deadline || "Not stated") + "\\n  " + match.link + "\\n  Why: " + match.reason).join("\\n\\n");
 return [{ json: {
