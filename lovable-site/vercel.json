@@ -35,6 +35,10 @@
       "dest": "/assets/$1"
     },
     {
+      "src": "/integrations/(.*)",
+      "dest": "/integrations/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/live-root.html"
     }
