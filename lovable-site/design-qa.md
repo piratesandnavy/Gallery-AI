@@ -1,31 +1,51 @@
 # Design QA
 
-## Reference
+## Evidence
 
-- Source: `https://www.lemuseedumonde.com/`
-- Desktop capture: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/root-source/source-desktop.png`
-- Mobile capture: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/root-source/source-mobile.png`
+- Source visual truth: `/var/folders/3n/y5b0qdv54d59ztxg7l8flhv00000gn/T/codex-clipboard-c995a6a4-2e56-45c3-87c6-1fff9a23d7c8.png`
+- Browser-rendered desktop implementation: `qa/integration-logos-desktop.png`
+- Browser-rendered mobile implementation: `qa/integration-logos-mobile.png`
+- Combined full-view comparison: `qa/source-vs-integration-logos.png`
+- Source pixels: 2736 × 1190.
+- Desktop implementation: 1920 × 890 pixels at a 1920 × 890 CSS viewport, density 1.
+- Mobile implementation: 390 × 844 pixels at a 390 × 844 CSS viewport, density 1.
+- Comparison normalization: source contained proportionally inside a 1920 × 890 frame; implementation captured at the same comparison frame.
+- State: “The AI Gallery Operating System” section with all five integration rows visible.
 
-## Migrated implementation
+## Findings
 
-- Local URL: `http://localhost:4173/`
-- Desktop capture: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/root-source/implementation-desktop-root.png`
-- Mobile capture: `/Users/siddharthmanchanda/Documents/Codex/2026-07-30/https-www-lemuseedumonde-com-gallery-ai/work/root-source/implementation-mobile-root.png`
+- No actionable P0, P1, or P2 differences were found.
+- The existing card size, typography, colors, borders, shadows, timeline, top icons, feature lists, and responsive structure remain unchanged.
+- Each logo group appears after its descriptive paragraph and before its feature list.
+- All 15 placements use repository-hosted SVG files; Microsoft Outlook is reused from one asset.
+- Official logo proportions and brand colors are preserved. Neutral plates provide contrast for dark marks without recoloring them.
 
-## Checks
+## Required fidelity surfaces
 
-- Desktop viewport: 1440 × 900, passed.
-- Mobile viewport: 390 × 844, passed with zero horizontal overflow.
-- Homepage title, content hierarchy, artwork, fonts, responsive layout, and WebGL tunnel use the captured production runtime.
-- Workflow carousel control changes the selected workflow.
-- Assistant panel opens and closes and exposes its prompts and input.
-- `/gallery-ai` serves the Gallery AI homepage.
-- `/gallery-ai/artist-application` serves the complete application form.
-- All homepage artwork images load from repository-hosted assets.
-- The application gallery-interior image loads from a repository-hosted asset.
-- No Lovable badge or Lovable project link is present.
-- External Cloudflare image delivery and Google Fonts references were replaced with local assets.
+- Fonts and typography: unchanged from the existing production cards.
+- Spacing and layout rhythm: new rows use 20px vertical margins; no outside spacing rules were modified.
+- Colors and visual tokens: existing tokens are untouched; official brand colors remain in the SVG assets.
+- Image quality and asset fidelity: official SVG assets render sharply at 26px height. The wider Google Workspace lockup is proportionally constrained to the card width.
+- Copy and content: all card descriptions and feature-list labels remain unchanged.
 
-## Result
+## Responsive and interaction checks
 
-Passed. The migrated routes render from the repository without the Lovable badge, analytics loader, or external image/font hosting.
+- Desktop: five centered logo groups rendered, 15 logo images total.
+- Mobile: rows wrap naturally and remain centered with no card overflow.
+- Hover: logo plates retain their colors and use a slight opacity/scale transition.
+- Accessibility: every row has a group label; every image has alt text, an aria-label, and lazy loading.
+- Existing production runtime emits a React hydration warning that predates this isolated enhancement; logo installation is delayed until after hydration and does not alter the React component tree.
+- Build: passed.
+- Sites worker tests: 4/4 passed.
+
+## Comparison history
+
+- Pass 1: the Google Workspace wordmark exceeded the narrow card width.
+- Fix: constrained the official wide lockup proportionally and allowed it to occupy its own centered flex line.
+- Pass 2: desktop and mobile captures show all logo rows contained and centered with the original card anatomy preserved.
+
+## Follow-up polish
+
+- None.
+
+final result: passed

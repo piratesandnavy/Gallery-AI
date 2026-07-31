@@ -56,6 +56,10 @@ h2 { font-size: clamp(52px, 6vw, 84px); line-height: .98; max-width: 850px; }
 .step-list h3 { font: 400 35px "Instrument Serif"; margin: 0 0 6px; }
 .step-list b { font-size: 13px; color: #cfc9bd; }
 .step-list p { color: #948e84; max-width: 690px; line-height: 1.7; margin: 10px 0 0; }
+.integration-logos { margin: 20px 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; }
+.integration-logo { min-width: 44px; min-height: 40px; padding: 6px 9px; display: inline-flex; align-items: center; justify-content: center; border-radius: 7px; background: #f4f1eb; transition: opacity .2s ease, transform .2s ease; }
+.integration-logo:hover { opacity: .88; transform: scale(1.04); }
+.integration-logo img { display: block; width: auto; height: 26px; object-fit: contain; }
 .flow { display: flex; margin-top: 52px; border: 1px solid #35312c; }
 .flow div { flex: 1; padding: 22px 8px; text-align: center; color: #bbb4a8; position: relative; font-size: 13px; }
 .flow b { position: absolute; right: -5px; color: #d4a360; }

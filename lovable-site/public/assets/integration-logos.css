@@ -1,0 +1,43 @@
+.gallery-integration-logos {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.gallery-integration-logo {
+  min-width: 42px;
+  min-height: 38px;
+  padding: 6px 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: #f4f1eb;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.gallery-integration-logo:hover {
+  opacity: 0.88;
+  transform: scale(1.04);
+}
+
+.gallery-integration-logo img {
+  display: block;
+  width: auto;
+  height: 26px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.gallery-integration-logo--wide {
+  flex-basis: 100%;
+  margin-inline: auto;
+}
+
+.gallery-integration-logo--wide img {
+  width: min(150px, 100%);
+  height: auto;
+}

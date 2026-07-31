@@ -43,6 +43,34 @@ const steps = [
   ["Review & Send", "Edit and send with confidence", "The finished text lands as a draft. You review it, edit it, and press send yourself."],
 ];
 
+const integrations = {
+  "Artist Database": [
+    ["Google Sheets", "/integrations/google-sheets.svg"],
+    ["Airtable", "/integrations/airtable.svg"],
+    ["Notion", "/integrations/notion.svg"],
+  ],
+  "Smart Calendar": [
+    ["Google Calendar", "/integrations/google-calendar.svg"],
+    ["Calendly", "/integrations/calendly.svg"],
+    ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"],
+  ],
+  "Automation Engine": [
+    ["n8n", "/integrations/n8n.svg"],
+    ["Zapier", "/integrations/zapier.svg"],
+    ["Make", "/integrations/make.svg"],
+  ],
+  "AI Assistant": [
+    ["OpenAI ChatGPT", "/integrations/openai.svg"],
+    ["Anthropic Claude", "/integrations/anthropic.svg"],
+    ["Google Gemini", "/integrations/google-gemini.svg"],
+  ],
+  "Review & Send": [
+    ["Gmail", "/integrations/gmail.svg"],
+    ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"],
+    ["Google Workspace", "/integrations/google-workspace.svg"],
+  ],
+};
+
 export function App() {
   const [active, setActive] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
@@ -160,7 +188,15 @@ export function App() {
             {steps.map(([title, subtitle, body], index) => (
               <li key={title}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <div><h3>{title}</h3><b>{subtitle}</b><p>{body}</p></div>
+                <div><h3>{title}</h3><b>{subtitle}</b><p>{body}</p>
+                  <div className="integration-logos" role="group" aria-label={`${title} integrations`}>
+                    {integrations[title].map(([name, src]) => (
+                      <span className="integration-logo" key={name} title={name}>
+                        <img src={src} alt={`${name} logo`} aria-label={name} loading="lazy" />
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </li>
             ))}
           </ol>

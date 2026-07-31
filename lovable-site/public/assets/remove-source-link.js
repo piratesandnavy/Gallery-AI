@@ -12,3 +12,5 @@ new MutationObserver(removeSourceLink).observe(document.documentElement, {
   childList: true,
   subtree: true,
 });
+
+import("/assets/integration-logos.js");
