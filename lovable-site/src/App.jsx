@@ -40,7 +40,7 @@ const steps = [
   ["Artist Database", "Artist profiles, artworks and collectors", "Your artists, artworks, collectors and enquiries stay in the spreadsheets you already use."],
   ["Smart Calendar", "Exhibitions, deadlines and appointments", "Shows, studio visits, install days and deadlines are read from your calendar so nothing is missed."],
   ["Automation Engine", "Change detection and smart workflows", "The automation engine works behind the scenes to keep your gallery organized by automatically managing updates and workflows."],
-  ["AI Assistant", "Summaries, drafts and reports", "An approved private or commercial AI model reads what was gathered and prepares the summary or email."],
+  ["AI Assistant", "Summaries, drafts and reports", "A Large Language Model (LLM) reviews your gallery information and generates summaries, email drafts, and valuable insights."],
   ["Review & Send", "Edit and send with confidence", "The finished text lands as a draft. You review it, edit it, and press send yourself."],
 ];
 

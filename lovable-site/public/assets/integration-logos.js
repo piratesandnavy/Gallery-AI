@@ -7,6 +7,7 @@ const integrationLogos = {
 };
 
 const automationEngineDescription = "The automation engine works behind the scenes to keep your gallery organized by automatically managing updates and workflows.";
+const aiAssistantDescription = "A Large Language Model (LLM) reviews your gallery information and generates summaries, email drafts, and valuable insights.";
 
 function buildLogoRow(title, logos) {
   const row = document.createElement("div");
@@ -46,6 +47,10 @@ function installIntegrationLogos() {
 
     if (title === "Automation Engine" && description) {
       description.textContent = automationEngineDescription;
+    }
+
+    if (title === "AI Assistant" && description) {
+      description.textContent = aiAssistantDescription;
     }
 
     if (card.querySelector(".gallery-integration-logos")) return;
