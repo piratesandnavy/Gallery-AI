@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ArrowRight, BarChart3, FileText, Mail, Sparkles, X } from "lucide-react";
 
 const agents = [
   {
@@ -38,7 +39,7 @@ const agents = [
 const steps = [
   ["Artist Database", "Artist profiles, artworks and collectors", "Your artists, artworks, collectors and enquiries stay in the spreadsheets you already use."],
   ["Smart Calendar", "Exhibitions, deadlines and appointments", "Shows, studio visits, install days and deadlines are read from your calendar so nothing is missed."],
-  ["Automation Engine", "Change detection and smart workflows", "The automation layer spots a new row or date and passes the right information to the right place."],
+  ["Automation Engine", "Change detection and smart workflows", "The automation engine works behind the scenes to keep your gallery organized by automatically managing updates and workflows."],
   ["AI Assistant", "Summaries, drafts and reports", "An approved private or commercial AI model reads what was gathered and prepares the summary or email."],
   ["Review & Send", "Edit and send with confidence", "The finished text lands as a draft. You review it, edit it, and press send yourself."],
 ];
@@ -79,6 +80,35 @@ export function App() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [contactError, setContactError] = useState("");
+  const [assistantOpen, setAssistantOpen] = useState(false);
+  const [assistantMode, setAssistantMode] = useState("summaries");
+
+  const assistantPanels = {
+    summaries: {
+      eyebrow: "Latest artist summary",
+      title: "Mara Vela — onboarding brief",
+      body: "Vancouver-based multidisciplinary artist working across textile, sculpture, and installation. Current practice explores memory, migration, and domestic archives. Available for group exhibitions from October 2026.",
+      meta: ["Artist profile", "Updated 12 min ago", "Ready for review"],
+    },
+    drafts: {
+      eyebrow: "Prepared email draft",
+      title: "Studio visit follow-up",
+      body: "Hi Mara, thank you for sharing your portfolio and availability. We would love to continue the conversation with a studio visit in September. I’ve included three possible times below for your review.",
+      meta: ["Gmail draft", "Not sent", "Human approval required"],
+    },
+    reports: {
+      eyebrow: "Weekly gallery insight",
+      title: "Opportunities are up 18%",
+      body: "Seven relevant opportunities were identified this week. Three match artists currently preparing new bodies of work, and two deadlines fall within the next fourteen days.",
+      meta: ["7 matches", "2 approaching deadlines", "Generated Friday"],
+    },
+  };
+
+  const assistantNav = [
+    ["summaries", "Summaries", FileText],
+    ["drafts", "Email drafts", Mail],
+    ["reports", "Reports & insights", BarChart3],
+  ];
 
   function sendMessage(text = message) {
     if (!text.trim()) return;
@@ -196,6 +226,7 @@ export function App() {
                       </span>
                     ))}
                   </div>
+                  {title === "AI Assistant" && <button className="text-action" onClick={() => setAssistantOpen(true)}>Open assistant workspace <ArrowRight size={15} /></button>}
                 </div>
               </li>
             ))}
@@ -250,6 +281,41 @@ export function App() {
             <button aria-label="Submit">↑</button>
           </form>
         </aside>
+      )}
+
+      {assistantOpen && (
+        <div className="assistant-backdrop" role="presentation" onMouseDown={(event) => event.target === event.currentTarget && setAssistantOpen(false)}>
+          <section className="assistant-workspace" role="dialog" aria-modal="true" aria-label="Gallery AI assistant workspace">
+            <header className="assistant-titlebar">
+              <a className="brand" href="#top">Gallery AI</a>
+              <button aria-label="Close assistant workspace" onClick={() => setAssistantOpen(false)}><X size={20} /></button>
+            </header>
+            <div className="assistant-layout">
+              <aside className="assistant-card">
+                <span className="assistant-mark"><Sparkles size={31} /></span>
+                <p className="eyebrow">Private-first intelligence</p>
+                <h2>AI Assistant</h2>
+                <p>An approved model reads what your gallery has gathered and prepares summaries, email drafts, and operational insight for review.</p>
+                <nav aria-label="Assistant views">
+                  {assistantNav.map(([id, label, Icon]) => (
+                    <button key={id} className={assistantMode === id ? "active" : ""} onClick={() => setAssistantMode(id)}>
+                      <Icon size={20} /><span>{label}</span><ArrowRight size={16} />
+                    </button>
+                  ))}
+                </nav>
+              </aside>
+              <article className="assistant-output" aria-live="polite">
+                <div className="output-head"><span className="status-dot" /> Local model ready</div>
+                <p className="eyebrow">{assistantPanels[assistantMode].eyebrow}</p>
+                <h3>{assistantPanels[assistantMode].title}</h3>
+                <p className="output-copy">{assistantPanels[assistantMode].body}</p>
+                <div className="output-meta">{assistantPanels[assistantMode].meta.map(item => <span key={item}>{item}</span>)}</div>
+                <div className="review-note"><b>Nothing sends automatically.</b><span>Review, edit, and approve every client-facing action.</span></div>
+                <div className="output-actions"><a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Open in workspace</a><button className="quiet" onClick={() => setAssistantOpen(false)}>Done</button></div>
+              </article>
+            </div>
+          </section>
+        </div>
       )}
     </div>
   );

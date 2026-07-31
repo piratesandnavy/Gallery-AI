@@ -6,6 +6,8 @@ const integrationLogos = {
   "Review & Send": [["Gmail", "/integrations/gmail.svg"], ["Microsoft Outlook", "/integrations/microsoft-outlook.svg"], ["Google Workspace", "/integrations/google-workspace.svg"]],
 };
 
+const automationEngineDescription = "The automation engine works behind the scenes to keep your gallery organized by automatically managing updates and workflows.";
+
 function buildLogoRow(title, logos) {
   const row = document.createElement("div");
   row.className = "gallery-integration-logos";
@@ -38,8 +40,15 @@ function installIntegrationLogos() {
     if (!heading) return;
 
     const card = heading.closest("li");
+    const description = card?.querySelector("p");
     const featureList = card?.querySelector("ul");
-    if (!card || !featureList || card.querySelector(".gallery-integration-logos")) return;
+    if (!card || !featureList) return;
+
+    if (title === "Automation Engine" && description) {
+      description.textContent = automationEngineDescription;
+    }
+
+    if (card.querySelector(".gallery-integration-logos")) return;
 
     featureList.before(buildLogoRow(title, logos));
   });
