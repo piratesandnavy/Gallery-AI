@@ -160,7 +160,7 @@ export function App() {
           </div>
           <div className="hero-copy">
             <p className="eyebrow">Live gallery automation</p>
-            <h1>Less admin.<br /><em>More art.</em></h1>
+            <h1>Less admin.<br /><em style={{ fontStyle: "italic", color: "#FF7518" }}>More art.</em></h1>
             <p className="lead">An AI automation system that connects gallery data, calendars, email, and private or commercial AI models to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
             <div className="actions">
               <a className="primary" href="#workflows">Explore the workflows</a>
