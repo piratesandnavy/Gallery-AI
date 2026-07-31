@@ -92,7 +92,6 @@ export function App() {
           <a href="#workflows">Agents</a>
           <a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Cloud workspace ↗</a>
           <a href="#contact">Contact</a>
-          <a href="https://github.com/piratesandnavy/Gallery-AI">View source ↗</a>
         </div>
       </header>
 
