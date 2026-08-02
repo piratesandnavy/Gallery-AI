@@ -14,3 +14,4 @@ new MutationObserver(removeSourceLink).observe(document.documentElement, {
 });
 
 import("/assets/integration-logos.js");
+import("/assets/move-workspace-card.js");
