@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, BarChart3, FileText, Mail, Sparkles, X } from "lucide-react";
+import { ArrowRight, BarChart3, FileText, Mail, MessageCircle, Sparkles, X } from "lucide-react";
 
 const agents = [
   {
@@ -257,7 +257,18 @@ export function App() {
               <label>Email<input name="email" required type="email" maxLength="255" /></label>
               <label>What would you like to automate?<textarea name="message" rows="4" maxLength="1000" /></label>
               {contactError && <p className="form-error" role="alert">{contactError}</p>}
-              <button disabled={sending}>{sending ? "Sending…" : "Send enquiry"}</button>
+              <div className="contact-actions">
+                <button className="contact-submit" disabled={sending}>{sending ? "Sending…" : "Send enquiry"}</button>
+                <button
+                  className="contact-chat"
+                  type="button"
+                  aria-label="Begin onboarding with the Gallery AI assistant"
+                  onClick={() => setChatOpen(true)}
+                >
+                  <MessageCircle size={17} aria-hidden="true" />
+                  Begin Onboarding with AI
+                </button>
+              </div>
             </form>
           )}
         </section>
