@@ -138,9 +138,6 @@ export default async function handler(request, response) {
     !isEmail(application.artistEmail) ||
     !application.location ||
     !application.medium ||
-    !application.artStyleGenre ||
-    !application.bio ||
-    !application.artistStatement ||
     !application.consent
   ) {
     response

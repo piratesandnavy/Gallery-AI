@@ -40,9 +40,6 @@ setTimeout(function () {
         ["aa-email", "Email address"],
         ["aa-location", "Location"],
         ["aa-medium", "Primary medium"],
-        ["aa-style", "Art style / genre"],
-        ["aa-bio", "Bio"],
-        ["aa-statement", "Artist statement"],
       ];
       const missing = required.find(([id]) => !byId(id)?.value.trim());
       const email = byId("aa-email")?.value.trim() || "";
@@ -81,13 +78,13 @@ setTimeout(function () {
         location: byId("aa-location").value,
         websiteOrInstagram: byId("aa-website")?.value || "",
         medium: byId("aa-medium").value,
-        style: byId("aa-style").value,
-        artStyleGenre: byId("aa-style").value,
+        style: byId("aa-style")?.value || "",
+        artStyleGenre: byId("aa-style")?.value || "",
         yearsActive: byId("aa-years")?.value || "",
         representationHistory: byId("aa-rep")?.value || "",
         portfolioLinks: byId("aa-portfolio")?.value || "",
-        bio: byId("aa-bio").value,
-        artistStatement: byId("aa-statement").value,
+        bio: byId("aa-bio")?.value || "",
+        artistStatement: byId("aa-statement")?.value || "",
         uploadedFiles: files.map(({ name, type, size }) => ({ name, type, size })),
         consent: byId("aa-consent").checked,
         companyWebsite: honeypot.value,
