@@ -7,7 +7,7 @@ function moveWorkspaceCard() {
   );
   const workspaceCard = workspaceLink?.parentElement;
 
-  if (!workspaceCard?.textContent.includes("All four agents live")) return;
+  if (!workspaceCard?.textContent.includes("All five agents live")) return;
 
   const designLabel = Array.from(
     document.querySelectorAll("main section span"),
