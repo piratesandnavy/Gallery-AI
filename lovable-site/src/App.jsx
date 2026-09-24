@@ -34,6 +34,14 @@ const agents = [
     description:
       "Combines Sheets and Calendar data, generates an operational summary, and creates a Gmail draft for review.",
   },
+  {
+    number: "05",
+    title: "Artist relation",
+    url: "https://gallery-ai-production-d094.up.railway.app/home/workflows",
+    image: "/assets/gallery/artist-relation.avif",
+    description:
+      "Keeps track of artist conversations, milestones and follow-ups, and prepares personalised check-in drafts in Gmail for review.",
+  },
 ];
 
 const steps = [
@@ -172,7 +180,7 @@ export function App() {
         </section>
 
         <section id="workflows" className="section workflows">
-          <p className="eyebrow">Four connected agents</p>
+          <p className="eyebrow">Five connected agents</p>
           <h2>Built around real gallery work.</h2>
           <p className="intro">Click a card, drag sideways, scroll horizontally, or use the arrow keys to move through the workflows.</p>
           <div className="agent-stage">
@@ -281,7 +289,7 @@ export function App() {
         <aside className="chat" aria-label="Gallery AI assistant">
           <div className="chat-head"><div><b>Gallery AI assistant</b><small>Ask anything, or leave your details.</small></div><button onClick={() => setChatOpen(false)}>×</button></div>
           <div className="messages">
-            <p>I can explain how the four agents work, what stays on your machine, and pass your details to the team.</p>
+            <p>I can explain how the five agents work, what stays on your machine, and pass your details to the team.</p>
             {reply && <p className="reply">{reply}</p>}
           </div>
           <div className="suggestions">
