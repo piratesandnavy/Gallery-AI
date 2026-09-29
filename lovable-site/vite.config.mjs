@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
 
 function productionRoutePreview() {
   const routes = new Map([
@@ -30,6 +32,22 @@ function productionRoutePreview() {
   };
 }
 
+function injectHomepageAgentCarousel() {
+  return {
+    name: "inject-homepage-agent-carousel",
+    closeBundle() {
+      const file = path.resolve("dist/client/live-root.html");
+      let html = readFileSync(file, "utf8");
+      if (html.includes("eleven-agent-carousel.js")) return;
+      html = html.replace(
+        "</head>",
+        '<link rel="stylesheet" href="/assets/eleven-agent-carousel.css?v=2"><script defer src="/assets/eleven-agent-carousel.js?v=2"></script></head>',
+      );
+      writeFileSync(file, html);
+    },
+  };
+}
+
 export default defineConfig({
   build: {
     outDir: "dist/client",
@@ -44,5 +62,5 @@ export default defineConfig({
       clientFiles: ["./src/main.jsx"],
     },
   },
-  plugins: [productionRoutePreview(), react()],
+  plugins: [productionRoutePreview(), react(), injectHomepageAgentCarousel()],
 });
