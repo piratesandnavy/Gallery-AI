@@ -38,7 +38,8 @@ function mountCarousel() {
       <button class="eca-arrow eca-next" type="button" aria-label="Next agent">→</button>
     </div>
     <div class="eca-dots" aria-label="Choose an agent"></div>`;
-  original.insertAdjacentElement("afterend", section);
+  original.insertAdjacentElement("beforebegin", section);
+  original.hidden = true;
 
   const ring = section.querySelector(".eca-ring");
   const dots = section.querySelector(".eca-dots");
