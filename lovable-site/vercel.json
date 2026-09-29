@@ -1,6 +1,26 @@
 {
   "framework": "vite",
   "outputDirectory": "dist/client",
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/gallery-ai",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    }
+  ],
   "routes": [
     {
       "src": "/api/contact",
