@@ -41,7 +41,7 @@ function injectHomepageAgentCarousel() {
       if (html.includes("eleven-agent-carousel.js")) return;
       html = html.replace(
         "</head>",
-        '<link rel="stylesheet" href="/assets/eleven-agent-carousel.css?v=3"><script defer src="/assets/eleven-agent-carousel.js?v=3"></script></head>',
+        '<link rel="stylesheet" href="/assets/eleven-agent-carousel.css?v=3"><script defer src="/assets/eleven-agent-carousel.js?v=6"></script></head>',
       );
       writeFileSync(file, html);
     },

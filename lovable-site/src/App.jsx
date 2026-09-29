@@ -4,90 +4,58 @@ import { ArrowLeft, ArrowRight, BarChart3, FileText, Mail, MessageCircle, Sparkl
 const agents = [
   {
     number: "01",
-    title: "Artist Intake Agent",
-    tagline: "New artists, onboarded fast",
-    url: "https://nex3.app.n8n.cloud/workflow/Yt2ObGKymMyzBpeI",
-    image: "/assets/gallery/weekly-report.avif",
-    description: "Captures artist details, writes a concise AI summary, updates your database, and drafts the first outreach so no new artist relationship stalls at intake.",
-  },
-  {
-    number: "02",
-    title: "Opportunity Matcher",
-    tagline: "The right call for the right artist",
-    url: "https://nex3.app.n8n.cloud/workflow/9Qpl24T0gifGgBmx",
-    image: "/assets/gallery/opportunity-finder.avif",
-    description: "Reviews exhibitions, grants, and open calls against each artist's profile, then logs the strongest matches so your team can follow up with confidence.",
-  },
-  {
-    number: "03",
-    title: "Collector Recommendation Agent",
-    tagline: "Personal picks, prepared in minutes",
-    url: "https://nex3.app.n8n.cloud/workflow/WgDdDuX3TJnorkyr",
-    image: "/assets/gallery/collector-assistant.avif",
-    description: "Pairs collector preferences with available inventory to suggest artworks worth sharing, so every conversation starts with a relevant, well-chosen recommendation.",
-  },
-  {
-    number: "04",
-    title: "Weekly Gallery Report",
-    tagline: "Your week, summarized and ready to send",
-    url: "https://nex3.app.n8n.cloud/workflow/koVENSQsPVooglzR",
-    image: "/assets/gallery/weekly-report.avif",
-    description: "Pulls data from Sheets and Calendar, writes an operational summary, and saves it as a Gmail draft you review before it goes out.",
-  },
-  {
-    number: "05",
-    title: "Artist Relations Agent",
+    title: "Artist Relations Assistant",
     tagline: "Every artist relationship, on track",
     url: "https://nex3.app.n8n.cloud/workflow/sQ80p48AY4LWG5qb",
-    image: "/assets/gallery/roundcarousel-e60dd7f7.png",
+    image: "/assets/gallery/roundcarousel-eec164e9.png",
     description: "Tracks conversations, follow-ups, and milestones for each artist, keeping a full relationship history so nothing important falls through the cracks.",
   },
   {
-    number: "06",
+    number: "02",
     title: "Opportunity Scout",
     tagline: "New openings, found before the deadline",
     url: "https://nex3.app.n8n.cloud/workflow/MbZsQNgCMQxIcHs1",
-    image: "/assets/gallery/roundcarousel-eec164e9.png",
+    image: "/assets/gallery/opportunity-finder.avif",
     description: "Scans for new gallery opportunities and organizes promising leads into a review list, giving your team more time to prepare strong applications.",
   },
   {
-    number: "07",
-    title: "Finance & Sales Admin Agent",
+    number: "03",
+    title: "Finance & Sales Admin Assistant",
     tagline: "Less admin, cleaner books",
     url: "https://nex3.app.n8n.cloud/workflow/cH1Xmg4hyQB2CeFK",
     image: "/assets/gallery/roundcarousel-ed7b1c40.png",
     description: "Handles routine sales administration, finance follow-ups, and operational reminders so your team spends less time on paperwork and more on clients.",
   },
   {
-    number: "08",
-    title: "Chief of Staff Orchestrator",
+    number: "04",
+    title: "Chief of Staff (orchestrator)",
     tagline: "One request, routed to the right agent",
     url: "https://nex3.app.n8n.cloud/workflow/Cxl4i0nP8pTI5ztx",
     image: "/assets/gallery/artist-onboarding.avif",
     description: "Coordinates the full agent team, sending each task to the right workflow so gallery operations run as one connected system.",
   },
   {
-    number: "09",
-    title: "Collector CRM Agent",
+    number: "05",
+    title: "Collector CRM Assistant",
     tagline: "Know every collector, every time",
     url: "https://nex3.app.n8n.cloud/workflow/f5HaInPvbCqiTRjX",
-    image: "/assets/gallery/roundcarousel-e60dd7f7.png",
+    image: "/assets/gallery/collector-assistant.avif",
     description: "Maintains each collector's preferences, conversation history, and buying signals in one place, so your team always knows who to contact and why.",
   },
   {
-    number: "10",
-    title: "Registrar Agent",
+    number: "06",
+    title: "Inventory Agent",
     tagline: "Inventory records you can trust",
     url: "https://nex3.app.n8n.cloud/workflow/3mOlGImOOQ8E7xP1",
-    image: "/assets/gallery/roundcarousel-eec164e9.png",
+    image: "/assets/gallery/weekly-report.avif",
     description: "Organizes artwork records, movement details, and documentation, keeping inventory accurate and audit-ready as works are loaned, shipped, or sold.",
   },
   {
-    number: "11",
-    title: "Content & Marketing Agent",
+    number: "07",
+    title: "Content & Marketing Assistant",
     tagline: "Campaigns drafted, ready for your voice",
     url: "https://nex3.app.n8n.cloud/workflow/Y8ttUTKH9LYlF1Jn",
-    image: "/assets/gallery/roundcarousel-ed7b1c40.png",
+    image: "/assets/gallery/roundcarousel-e60dd7f7.png",
     description: "Prepares exhibition content, campaign ideas, and marketing drafts for your review, helping you promote shows consistently without starting from a blank page.",
   },
 ];
@@ -306,7 +274,7 @@ export function App() {
         </section>
 
         <section id="workflows" className="section workflows">
-          <p className="eyebrow">Eleven connected agents</p>
+          <p className="eyebrow">Seven connected roles</p>
           <h2>Built around real gallery work.</h2>
           <p className="intro">Click a card, drag sideways, use the arrows, or wait for the carousel to move through the connected gallery workflows.</p>
           <div

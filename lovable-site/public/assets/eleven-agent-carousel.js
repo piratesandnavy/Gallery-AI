@@ -1,16 +1,12 @@
 (function () {
 const agents = [
-  ["01", "Artist Intake Agent", "New artists, onboarded fast", "Captures artist details, writes a concise AI summary, updates your database, and drafts the first outreach so no new artist relationship stalls at intake.", "/assets/gallery/weekly-report.avif", "https://nex3.app.n8n.cloud/workflow/Yt2ObGKymMyzBpeI"],
-  ["02", "Opportunity Matcher", "The right call for the right artist", "Reviews exhibitions, grants, and open calls against each artist's profile, then logs the strongest matches so your team can follow up with confidence.", "/assets/gallery/opportunity-finder.avif", "https://nex3.app.n8n.cloud/workflow/9Qpl24T0gifGgBmx"],
-  ["03", "Collector Recommendation Agent", "Personal picks, prepared in minutes", "Pairs collector preferences with available inventory to suggest artworks worth sharing, so every conversation starts with a relevant, well-chosen recommendation.", "/assets/gallery/collector-assistant.avif", "https://nex3.app.n8n.cloud/workflow/WgDdDuX3TJnorkyr"],
-  ["04", "Weekly Gallery Report", "Your week, summarized and ready to send", "Pulls data from Sheets and Calendar, writes an operational summary, and saves it as a Gmail draft you review before it goes out.", "/assets/gallery/weekly-report.avif", "https://nex3.app.n8n.cloud/workflow/koVENSQsPVooglzR"],
-  ["05", "Artist Relations Agent", "Every artist relationship, on track", "Tracks conversations, follow-ups, and milestones for each artist, keeping a full relationship history so nothing important falls through the cracks.", "/assets/gallery/roundcarousel-e60dd7f7.png", "https://nex3.app.n8n.cloud/workflow/sQ80p48AY4LWG5qb"],
-  ["06", "Opportunity Scout", "New openings, found before the deadline", "Scans for new gallery opportunities and organizes promising leads into a review list, giving your team more time to prepare strong applications.", "/assets/gallery/roundcarousel-eec164e9.png", "https://nex3.app.n8n.cloud/workflow/MbZsQNgCMQxIcHs1"],
-  ["07", "Finance & Sales Admin Agent", "Less admin, cleaner books", "Handles routine sales administration, finance follow-ups, and operational reminders so your team spends less time on paperwork and more on clients.", "/assets/gallery/roundcarousel-ed7b1c40.png", "https://nex3.app.n8n.cloud/workflow/cH1Xmg4hyQB2CeFK"],
-  ["08", "Chief of Staff Orchestrator", "One request, routed to the right agent", "Coordinates the full agent team, sending each task to the right workflow so gallery operations run as one connected system.", "/assets/gallery/artist-onboarding.avif", "https://nex3.app.n8n.cloud/workflow/Cxl4i0nP8pTI5ztx"],
-  ["09", "Collector CRM Agent", "Know every collector, every time", "Maintains each collector's preferences, conversation history, and buying signals in one place, so your team always knows who to contact and why.", "/assets/gallery/roundcarousel-e60dd7f7.png", "https://nex3.app.n8n.cloud/workflow/f5HaInPvbCqiTRjX"],
-  ["10", "Registrar Agent", "Inventory records you can trust", "Organizes artwork records, movement details, and documentation, keeping inventory accurate and audit-ready as works are loaned, shipped, or sold.", "/assets/gallery/roundcarousel-eec164e9.png", "https://nex3.app.n8n.cloud/workflow/3mOlGImOOQ8E7xP1"],
-  ["11", "Content & Marketing Agent", "Campaigns drafted, ready for your voice", "Prepares exhibition content, campaign ideas, and marketing drafts for your review, helping you promote shows consistently without starting from a blank page.", "/assets/gallery/roundcarousel-ed7b1c40.png", "https://nex3.app.n8n.cloud/workflow/Y8ttUTKH9LYlF1Jn"],
+  ["01", "Artist Relations Assistant", "Every artist relationship, on track", "Tracks conversations, follow-ups, and milestones for each artist, keeping a full relationship history so nothing important falls through the cracks.", "/assets/gallery/roundcarousel-eec164e9.png", "https://nex3.app.n8n.cloud/workflow/sQ80p48AY4LWG5qb"],
+  ["02", "Opportunity Scout", "New openings, found before the deadline", "Scans for new gallery opportunities and organizes promising leads into a review list, giving your team more time to prepare strong applications.", "/assets/gallery/opportunity-finder.avif", "https://nex3.app.n8n.cloud/workflow/MbZsQNgCMQxIcHs1"],
+  ["03", "Finance & Sales Admin Assistant", "Less admin, cleaner books", "Handles routine sales administration, finance follow-ups, and operational reminders so your team spends less time on paperwork and more on clients.", "/assets/gallery/roundcarousel-ed7b1c40.png", "https://nex3.app.n8n.cloud/workflow/cH1Xmg4hyQB2CeFK"],
+  ["04", "Chief of Staff (orchestrator)", "One request, routed to the right agent", "Coordinates the full agent team, sending each task to the right workflow so gallery operations run as one connected system.", "/assets/gallery/artist-onboarding.avif", "https://nex3.app.n8n.cloud/workflow/Cxl4i0nP8pTI5ztx"],
+  ["05", "Collector CRM Assistant", "Know every collector, every time", "Maintains each collector's preferences, conversation history, and buying signals in one place, so your team always knows who to contact and why.", "/assets/gallery/collector-assistant.avif", "https://nex3.app.n8n.cloud/workflow/f5HaInPvbCqiTRjX"],
+  ["06", "Inventory Agent", "Inventory records you can trust", "Organizes artwork records, movement details, and documentation, keeping inventory accurate and audit-ready as works are loaned, shipped, or sold.", "/assets/gallery/weekly-report.avif", "https://nex3.app.n8n.cloud/workflow/3mOlGImOOQ8E7xP1"],
+  ["07", "Content & Marketing Assistant", "Campaigns drafted, ready for your voice", "Prepares exhibition content, campaign ideas, and marketing drafts for your review, helping you promote shows consistently without starting from a blank page.", "/assets/gallery/roundcarousel-e60dd7f7.png", "https://nex3.app.n8n.cloud/workflow/Y8ttUTKH9LYlF1Jn"],
 ];
 
 function mountCarousel() {
@@ -28,11 +24,11 @@ function mountCarousel() {
   section.dataset.elevenAgentCarousel = "";
   section.innerHTML = `
     <div class="eca-heading">
-      <p>Eleven connected agents</p>
+      <p>Seven connected roles</p>
       <h2>Built around real gallery work.</h2>
       <span>Click a card, drag sideways, use the arrows, or wait for the carousel to move through the connected gallery workflows.</span>
     </div>
-    <div class="eca-stage" role="group" aria-label="Eleven connected gallery agents" tabindex="0">
+    <div class="eca-stage" role="group" aria-label="Seven connected gallery roles" tabindex="0">
       <button class="eca-arrow eca-prev" type="button" aria-label="Previous agent">←</button>
       <div class="eca-ring"></div>
       <button class="eca-arrow eca-next" type="button" aria-label="Next agent">→</button>
