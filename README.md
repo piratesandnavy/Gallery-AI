@@ -12,7 +12,7 @@ social preview, and application route. A portable Node server serves the
 version-controlled HTML entry points and form APIs:
 
 - `/` → `public/live-root.html`
-- `/gallery-ai` → `public/live-gallery-ai.html`
+- `/gallery-ai` → the current Vite/React build from `src/`
 - `/gallery-ai/artist-application` → `public/live-artist-application.html`
 
 All required production files are stored under `public/assets/`. The Lovable
@@ -30,14 +30,14 @@ The production agents are hosted in n8n Cloud. The website links directly to
 the verified workflows in that workspace.
 
 A self-hosted, human-in-the-loop starter system for a gallery. Google Sheets is
-the shared data hub, four n8n workflows are the agents, Ollama/Qwen 3 is the
-local language model, and Gmail Drafts is the owner's review interface.
+the shared data hub, n8n workflows are the agents, Ollama/Qwen 3 is the local
+language model, and Gmail Drafts is the owner's review interface.
 
 Client site: https://www.lemuseedumonde.com/gallery-ai
 
 Cloud workspace: https://nex3.app.n8n.cloud/home/workflows
 
-The website presents the four published agents and links authenticated users
+The website presents the connected agent team and links authenticated users
 directly to each production workflow.
 
 Cloud deployment guide: [`CLOUD-DEPLOYMENT.md`](CLOUD-DEPLOYMENT.md)

@@ -7,14 +7,17 @@ import artistApplication from "./api/artist-application.mjs";
 import contact from "./api/contact.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
-const publicDirectory = path.join(root, "public");
+const builtDirectory = path.join(root, "dist", "client");
+const publicDirectory = existsSync(path.join(builtDirectory, "index.html"))
+  ? builtDirectory
+  : path.join(root, "public");
 const port = Number(process.env.PORT || 3000);
 const maximumBodySize = 1024 * 1024;
 
 const pageRoutes = new Map([
   ["/", "live-root.html"],
-  ["/gallery-ai", "live-gallery-ai.html"],
-  ["/gallery-ai/", "live-gallery-ai.html"],
+  ["/gallery-ai", "index.html"],
+  ["/gallery-ai/", "index.html"],
   ["/gallery-ai/artist-application", "live-artist-application.html"],
   ["/gallery-ai/artist-application/", "live-artist-application.html"],
 ]);
