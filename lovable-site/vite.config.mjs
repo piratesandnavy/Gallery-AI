@@ -1,11 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
 
 function productionRoutePreview() {
   const routes = new Map([
-    ["/", "/index.html"],
-    ["/gallery-ai", "/index.html"],
-    ["/gallery-ai/", "/index.html"],
+    ["/", "/live-root.html"],
+    ["/gallery-ai", "/live-root.html"],
+    ["/gallery-ai/", "/live-root.html"],
     [
       "/gallery-ai/artist-application",
       "/live-artist-application.html",
@@ -30,6 +32,29 @@ function productionRoutePreview() {
   };
 }
 
+function injectElevenAgentCarousel() {
+  return {
+    name: "inject-eleven-agent-carousel",
+    closeBundle() {
+      for (const page of ["live-root.html", "live-gallery-ai.html"]) {
+        const file = path.resolve("dist/client", page);
+        let html = readFileSync(file, "utf8");
+        if (html.includes("eleven-agent-carousel.js")) continue;
+        html = html
+          .replace('<script defer src="/assets/remove-source-link-n8n-cloud.js"></script>', "")
+          .replace('<script type="module" src="/assets/move-workspace-card-n8n-cloud.js"></script>', "")
+          .replace('<script defer src="/assets/remove-source-link.js"></script>', "")
+          .replace('<script type="module" src="/assets/move-workspace-card.js?v=1"></script>', "");
+        html = html.replace(
+          "</head>",
+          '<link rel="stylesheet" href="/assets/eleven-agent-carousel.css?v=1"><script defer src="/assets/eleven-agent-carousel.js?v=1"></script></head>',
+        );
+        writeFileSync(file, html);
+      }
+    },
+  };
+}
+
 export default defineConfig({
   build: {
     outDir: "dist/client",
@@ -44,5 +69,5 @@ export default defineConfig({
       clientFiles: ["./src/main.jsx"],
     },
   },
-  plugins: [productionRoutePreview(), react()],
+  plugins: [productionRoutePreview(), react(), injectElevenAgentCarousel()],
 });
