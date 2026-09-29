@@ -16,7 +16,7 @@
     },
     {
       "src": "/",
-      "dest": "/live-root.html"
+      "dest": "/index.html"
     },
     {
       "src": "/gallery-ai/?",

@@ -15,7 +15,7 @@ const port = Number(process.env.PORT || 3000);
 const maximumBodySize = 1024 * 1024;
 
 const pageRoutes = new Map([
-  ["/", "live-root.html"],
+  ["/", "index.html"],
   ["/gallery-ai", "index.html"],
   ["/gallery-ai/", "index.html"],
   ["/gallery-ai/artist-application", "live-artist-application.html"],
