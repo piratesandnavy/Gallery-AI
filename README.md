@@ -8,8 +8,8 @@ explanation, contact form, and Gallery AI assistant.
 
 The complete production site is checked into `lovable-site/public/`, including
 the original WebGL tunnel animation, assistant runtime, gallery images, fonts,
-social preview, and application route. Vercel serves the version-controlled
-HTML entry points directly:
+social preview, and application route. A portable Node server serves the
+version-controlled HTML entry points and form APIs:
 
 - `/` → `public/live-root.html`
 - `/gallery-ai` → `public/live-gallery-ai.html`
@@ -25,6 +25,13 @@ cd lovable-site
 npm install
 npm run dev
 ```
+
+For production, deploy `lovable-site/` as a Railway service. The included
+`railway.json` starts the website with `npm start` and checks `/healthz`.
+Configure `RESEND_API_KEY`, `RESEND_EMAIL_DOMAIN`,
+`N8N_ARTIST_APPLICATION_WEBHOOK_URL`, and
+`ARTIST_APPLICATION_WEBHOOK_SECRET` on that service, then point the website
+domain to it. The n8n and Ollama agent services are unchanged.
 
 A self-hosted, human-in-the-loop starter system for a gallery. Google Sheets is
 the shared data hub, four n8n workflows are the agents, Ollama/Qwen 3 is the
