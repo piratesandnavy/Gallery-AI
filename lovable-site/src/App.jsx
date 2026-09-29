@@ -1,46 +1,94 @@
-import { useState } from "react";
-import { ArrowRight, BarChart3, FileText, Mail, MessageCircle, Sparkles, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, BarChart3, FileText, Mail, MessageCircle, Sparkles, X } from "lucide-react";
 
 const agents = [
   {
     number: "01",
-    title: "Artist onboarding",
+    title: "Artist Intake Agent",
+    tagline: "New artists, onboarded fast",
     url: "https://nex3.app.n8n.cloud/workflow/Yt2ObGKymMyzBpeI",
-    image: "/assets/gallery/artist-onboarding.avif",
-    description:
-      "Captures artist information, creates a concise AI-assisted summary, updates the database, and prepares communication.",
+    image: "/assets/gallery/weekly-report.avif",
+    description: "Captures artist details, writes a concise AI summary, updates your database, and drafts the first outreach so no new artist relationship stalls at intake.",
   },
   {
     number: "02",
-    title: "Opportunity finder",
+    title: "Opportunity Matcher",
+    tagline: "The right call for the right artist",
     url: "https://nex3.app.n8n.cloud/workflow/9Qpl24T0gifGgBmx",
     image: "/assets/gallery/opportunity-finder.avif",
-    description:
-      "Reviews opportunities against artist profiles and records relevant matches for follow-up.",
+    description: "Reviews exhibitions, grants, and open calls against each artist's profile, then logs the strongest matches so your team can follow up with confidence.",
   },
   {
     number: "03",
-    title: "Collector assistant",
+    title: "Collector Recommendation Agent",
+    tagline: "Personal picks, prepared in minutes",
     url: "https://nex3.app.n8n.cloud/workflow/WgDdDuX3TJnorkyr",
     image: "/assets/gallery/collector-assistant.avif",
-    description:
-      "Uses collector preferences and available artwork data to prepare thoughtful recommendations.",
+    description: "Pairs collector preferences with available inventory to suggest artworks worth sharing, so every conversation starts with a relevant, well-chosen recommendation.",
   },
   {
     number: "04",
-    title: "Weekly gallery report",
+    title: "Weekly Gallery Report",
+    tagline: "Your week, summarized and ready to send",
     url: "https://nex3.app.n8n.cloud/workflow/koVENSQsPVooglzR",
     image: "/assets/gallery/weekly-report.avif",
-    description:
-      "Combines Sheets and Calendar data, generates an operational summary, and creates a Gmail draft for review.",
+    description: "Pulls data from Sheets and Calendar, writes an operational summary, and saves it as a Gmail draft you review before it goes out.",
   },
   {
     number: "05",
-    title: "Artist relation",
+    title: "Artist Relations Agent",
+    tagline: "Every artist relationship, on track",
     url: "https://nex3.app.n8n.cloud/workflow/sQ80p48AY4LWG5qb",
-    image: "/assets/gallery/artist-relation.avif",
-    description:
-      "Keeps track of artist conversations, milestones and follow-ups, and prepares personalised check-in drafts in Gmail for review.",
+    image: "/assets/gallery/roundcarousel-e60dd7f7.png",
+    description: "Tracks conversations, follow-ups, and milestones for each artist, keeping a full relationship history so nothing important falls through the cracks.",
+  },
+  {
+    number: "06",
+    title: "Opportunity Scout",
+    tagline: "New openings, found before the deadline",
+    url: "https://nex3.app.n8n.cloud/workflow/MbZsQNgCMQxIcHs1",
+    image: "/assets/gallery/roundcarousel-eec164e9.png",
+    description: "Scans for new gallery opportunities and organizes promising leads into a review list, giving your team more time to prepare strong applications.",
+  },
+  {
+    number: "07",
+    title: "Finance & Sales Admin Agent",
+    tagline: "Less admin, cleaner books",
+    url: "https://nex3.app.n8n.cloud/workflow/cH1Xmg4hyQB2CeFK",
+    image: "/assets/gallery/roundcarousel-ed7b1c40.png",
+    description: "Handles routine sales administration, finance follow-ups, and operational reminders so your team spends less time on paperwork and more on clients.",
+  },
+  {
+    number: "08",
+    title: "Chief of Staff Orchestrator",
+    tagline: "One request, routed to the right agent",
+    url: "https://nex3.app.n8n.cloud/workflow/Cxl4i0nP8pTI5ztx",
+    image: "/assets/gallery/artist-onboarding.avif",
+    description: "Coordinates the full agent team, sending each task to the right workflow so gallery operations run as one connected system.",
+  },
+  {
+    number: "09",
+    title: "Collector CRM Agent",
+    tagline: "Know every collector, every time",
+    url: "https://nex3.app.n8n.cloud/workflow/f5HaInPvbCqiTRjX",
+    image: "/assets/gallery/roundcarousel-e60dd7f7.png",
+    description: "Maintains each collector's preferences, conversation history, and buying signals in one place, so your team always knows who to contact and why.",
+  },
+  {
+    number: "10",
+    title: "Registrar Agent",
+    tagline: "Inventory records you can trust",
+    url: "https://nex3.app.n8n.cloud/workflow/3mOlGImOOQ8E7xP1",
+    image: "/assets/gallery/roundcarousel-eec164e9.png",
+    description: "Organizes artwork records, movement details, and documentation, keeping inventory accurate and audit-ready as works are loaned, shipped, or sold.",
+  },
+  {
+    number: "11",
+    title: "Content & Marketing Agent",
+    tagline: "Campaigns drafted, ready for your voice",
+    url: "https://nex3.app.n8n.cloud/workflow/Y8ttUTKH9LYlF1Jn",
+    image: "/assets/gallery/roundcarousel-ed7b1c40.png",
+    description: "Prepares exhibition content, campaign ideas, and marketing drafts for your review, helping you promote shows consistently without starting from a blank page.",
   },
 ];
 
@@ -81,7 +129,9 @@ const integrations = {
 };
 
 export function App() {
-  const [active, setActive] = useState(0);
+  const [activeAgent, setActiveAgent] = useState(0);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const dragStart = useRef(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
@@ -117,6 +167,23 @@ export function App() {
     ["drafts", "Email drafts", Mail],
     ["reports", "Reports & insights", BarChart3],
   ];
+
+  function moveAgent(direction) {
+    setActiveAgent((current) => (current + direction + agents.length) % agents.length);
+  }
+
+  function agentOffset(index) {
+    let offset = index - activeAgent;
+    if (offset > agents.length / 2) offset -= agents.length;
+    if (offset < -agents.length / 2) offset += agents.length;
+    return offset;
+  }
+
+  useEffect(() => {
+    if (carouselPaused) return undefined;
+    const timer = window.setInterval(() => moveAgent(1), 4600);
+    return () => window.clearInterval(timer);
+  }, [carouselPaused]);
 
   function sendMessage(text = message) {
     if (!text.trim()) return;
@@ -180,41 +247,59 @@ export function App() {
         </section>
 
         <section id="workflows" className="section workflows">
-          <p className="eyebrow">Five connected agents</p>
+          <p className="eyebrow">Eleven connected agents</p>
           <h2>Built around real gallery work.</h2>
-          <p className="intro">Click a card, drag sideways, scroll horizontally, or use the arrow keys to move through the workflows.</p>
-          <div className="agent-stage">
-            <button className="arrow left" disabled={active === 0} onClick={() => setActive(Math.max(0, active - 1))} aria-label="Previous agent">←</button>
-            <div className="agent-cards">
-              {agents.map((agent, index) => (
-                <button
-                  className={`agent-card ${index === active ? "active" : ""}`}
+          <p className="intro">Click a card, drag sideways, use the arrows, or wait for the carousel to move through the connected gallery workflows.</p>
+          <div
+            className="agent-stage"
+            role="group"
+            tabIndex="0"
+            aria-label="Connected gallery agents"
+            onMouseEnter={() => setCarouselPaused(true)}
+            onMouseLeave={() => setCarouselPaused(false)}
+            onFocus={() => setCarouselPaused(true)}
+            onBlur={(event) => !event.currentTarget.contains(event.relatedTarget) && setCarouselPaused(false)}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowLeft") moveAgent(-1);
+              if (event.key === "ArrowRight") moveAgent(1);
+            }}
+            onPointerDown={(event) => { dragStart.current = event.clientX; setCarouselPaused(true); }}
+            onPointerUp={(event) => {
+              if (dragStart.current !== null && Math.abs(event.clientX - dragStart.current) > 35) moveAgent(event.clientX < dragStart.current ? 1 : -1);
+              dragStart.current = null;
+            }}
+          >
+            <button className="agent-arrow agent-arrow-left" onClick={() => moveAgent(-1)} aria-label="Previous agent"><ArrowLeft size={18} /></button>
+            <div className="agent-ring">
+            {agents.map((agent, index) => {
+              const offset = agentOffset(index);
+              const distance = Math.abs(offset);
+              return (
+                <article
+                  className="agent-card"
                   key={agent.title}
-                  onClick={() => setActive(index)}
-                  aria-label={agent.title}
+                  aria-current={index === activeAgent ? "true" : undefined}
+                  aria-hidden={distance > 2}
+                  onClick={() => setActiveAgent(index)}
+                  style={{ "--offset": offset, "--distance": distance, "--card-opacity": distance > 2 ? 0 : index === activeAgent ? 1 : 0.58, "--card-z": 20 - distance }}
                 >
                   <img src={agent.image} alt={agent.title} />
                   <span className="card-shade" />
                   <span className="card-copy">
                     <b>{agent.number}</b>
                     <strong>{agent.title}</strong>
+                    <em>{agent.tagline}</em>
                     <small>{agent.description}</small>
+                    {index === activeAgent && <a href={agent.url}>Open agent ↗</a>}
                   </span>
-                </button>
-              ))}
+                </article>
+              );
+            })}
             </div>
-            <button className="arrow right" disabled={active === agents.length - 1} onClick={() => setActive(Math.min(agents.length - 1, active + 1))} aria-label="Next agent">→</button>
+            <button className="agent-arrow agent-arrow-right" onClick={() => moveAgent(1)} aria-label="Next agent"><ArrowRight size={18} /></button>
           </div>
-          <div className="dots">
-            {agents.map((a, i) => <button aria-label={`Show ${a.title}`} className={i === active ? "selected" : ""} onClick={() => setActive(i)} key={a.title} />)}
-          </div>
-          <div className="active-agent">
-            <div>
-              <span>Published agent {agents[active].number}</span>
-              <strong>{agents[active].title}</strong>
-              <small>Sign in to the Gallery AI workspace to view executions, configuration, and workflow history.</small>
-            </div>
-            <a href={agents[active].url}>Open agent ↗</a>
+          <div className="agent-dots" aria-label="Choose an agent">
+            {agents.map((agent, index) => <button key={agent.title} className={index === activeAgent ? "active" : ""} onClick={() => setActiveAgent(index)} aria-label={`Show ${agent.title}`} />)}
           </div>
         </section>
 
