@@ -40,7 +40,7 @@
     },
     {
       "src": "/gallery-ai/?",
-      "dest": "/live-root.html"
+      "dest": "/index.html"
     },
     {
       "src": "/gallery-ai/artist-application/?",
