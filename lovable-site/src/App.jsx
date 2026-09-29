@@ -5,7 +5,7 @@ const agents = [
   {
     number: "01",
     title: "Artist onboarding",
-    url: "https://gallery-ai-production-d094.up.railway.app/workflow/mjoQ3fQc1eE3ALqx",
+    url: "https://nex3.app.n8n.cloud/workflow/Yt2ObGKymMyzBpeI",
     image: "/assets/gallery/artist-onboarding.avif",
     description:
       "Captures artist information, creates a concise AI-assisted summary, updates the database, and prepares communication.",
@@ -13,7 +13,7 @@ const agents = [
   {
     number: "02",
     title: "Opportunity finder",
-    url: "https://gallery-ai-production-d094.up.railway.app/workflow/tdb1ZbGSeIGyExKX",
+    url: "https://nex3.app.n8n.cloud/workflow/9Qpl24T0gifGgBmx",
     image: "/assets/gallery/opportunity-finder.avif",
     description:
       "Reviews opportunities against artist profiles and records relevant matches for follow-up.",
@@ -21,7 +21,7 @@ const agents = [
   {
     number: "03",
     title: "Collector assistant",
-    url: "https://gallery-ai-production-d094.up.railway.app/workflow/SXASSCLEd5HVQEF7",
+    url: "https://nex3.app.n8n.cloud/workflow/WgDdDuX3TJnorkyr",
     image: "/assets/gallery/collector-assistant.avif",
     description:
       "Uses collector preferences and available artwork data to prepare thoughtful recommendations.",
@@ -29,7 +29,7 @@ const agents = [
   {
     number: "04",
     title: "Weekly gallery report",
-    url: "https://gallery-ai-production-d094.up.railway.app/workflow/w26K1uJ7ZdB8ZN3w",
+    url: "https://nex3.app.n8n.cloud/workflow/koVENSQsPVooglzR",
     image: "/assets/gallery/weekly-report.avif",
     description:
       "Combines Sheets and Calendar data, generates an operational summary, and creates a Gmail draft for review.",
@@ -37,7 +37,7 @@ const agents = [
   {
     number: "05",
     title: "Artist relation",
-    url: "https://gallery-ai-production-d094.up.railway.app/home/workflows",
+    url: "https://nex3.app.n8n.cloud/workflow/sQ80p48AY4LWG5qb",
     image: "/assets/gallery/artist-relation.avif",
     description:
       "Keeps track of artist conversations, milestones and follow-ups, and prepares personalised check-in drafts in Gmail for review.",
@@ -156,7 +156,7 @@ export function App() {
         <a className="brand" href="#top">Gallery AI</a>
         <div className="nav-links">
           <a href="#workflows">Agents</a>
-          <a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Cloud workspace ↗</a>
+          <a href="https://nex3.app.n8n.cloud/home/workflows">Cloud workspace ↗</a>
           <a href="#contact">Contact</a>
         </div>
       </header>
@@ -172,7 +172,7 @@ export function App() {
             <p className="lead">An AI automation system that connects gallery data, calendars, email, and private or commercial AI models to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
             <div className="actions">
               <a className="primary" href="#workflows">Explore the workflows</a>
-              <a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Open Gallery AI Cloud</a>
+              <a href="https://nex3.app.n8n.cloud/home/workflows">Open Gallery AI Cloud</a>
               <a href="https://github.com/piratesandnavy/Gallery-AI">Run on your machine</a>
               <a href="#contact">Contact us</a>
             </div>
@@ -330,7 +330,7 @@ export function App() {
                 <p className="output-copy">{assistantPanels[assistantMode].body}</p>
                 <div className="output-meta">{assistantPanels[assistantMode].meta.map(item => <span key={item}>{item}</span>)}</div>
                 <div className="review-note"><b>Nothing sends automatically.</b><span>Review, edit, and approve every client-facing action.</span></div>
-                <div className="output-actions"><a href="https://gallery-ai-production-d094.up.railway.app/home/workflows">Open in workspace</a><button className="quiet" onClick={() => setAssistantOpen(false)}>Done</button></div>
+                <div className="output-actions"><a href="https://nex3.app.n8n.cloud/home/workflows">Open in workspace</a><button className="quiet" onClick={() => setAssistantOpen(false)}>Done</button></div>
               </article>
             </div>
           </section>

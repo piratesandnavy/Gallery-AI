@@ -1,5 +1,5 @@
 const workspaceHref =
-  "https://gallery-ai-production-d094.up.railway.app/home/workflows";
+  "https://nex3.app.n8n.cloud/home/workflows";
 
 function moveWorkspaceCard() {
   const workspaceLink = document.querySelector(

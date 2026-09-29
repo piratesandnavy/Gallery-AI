@@ -26,12 +26,8 @@ npm install
 npm run dev
 ```
 
-For production, deploy `lovable-site/` as a Railway service. The included
-`railway.json` starts the website with `npm start` and checks `/healthz`.
-Configure `RESEND_API_KEY`, `RESEND_EMAIL_DOMAIN`,
-`N8N_ARTIST_APPLICATION_WEBHOOK_URL`, and
-`ARTIST_APPLICATION_WEBHOOK_SECRET` on that service, then point the website
-domain to it. The n8n and Ollama agent services are unchanged.
+The production agents are hosted in n8n Cloud. The website links directly to
+the verified workflows in that workspace.
 
 A self-hosted, human-in-the-loop starter system for a gallery. Google Sheets is
 the shared data hub, four n8n workflows are the agents, Ollama/Qwen 3 is the
@@ -39,7 +35,7 @@ local language model, and Gmail Drafts is the owner's review interface.
 
 Client site: https://www.lemuseedumonde.com/gallery-ai
 
-Cloud workspace: https://gallery-ai-production-d094.up.railway.app/home/workflows
+Cloud workspace: https://nex3.app.n8n.cloud/home/workflows
 
 The website presents the four published agents and links authenticated users
 directly to each production workflow.
