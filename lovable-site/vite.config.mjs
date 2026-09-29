@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 function productionRoutePreview() {
   const routes = new Map([
-    ["/", "/live-root.html"],
+    ["/", "/index.html"],
     ["/gallery-ai", "/index.html"],
     ["/gallery-ai/", "/index.html"],
     [

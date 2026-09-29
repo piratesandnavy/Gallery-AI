@@ -132,6 +132,7 @@ export function App() {
   const [activeAgent, setActiveAgent] = useState(0);
   const [carouselPaused, setCarouselPaused] = useState(false);
   const dragStart = useRef(null);
+  const heroRef = useRef(null);
   const [chatOpen, setChatOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
@@ -185,6 +186,43 @@ export function App() {
     return () => window.clearInterval(timer);
   }, [carouselPaused]);
 
+  useEffect(() => {
+    const targets = document.querySelectorAll(".section, .privacy, .contact, footer");
+    targets.forEach((target) => target.classList.add("motion-section"));
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      }),
+      { threshold: 0.12, rootMargin: "0px 0px -8%" }
+    );
+    targets.forEach((target) => observer.observe(target));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let frame = 0;
+    const updateHero = () => {
+      frame = 0;
+      const hero = heroRef.current;
+      if (!hero) return;
+      const bounds = hero.getBoundingClientRect();
+      const distance = Math.max(1, hero.offsetHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, -bounds.top / distance));
+      hero.style.setProperty("--scroll-progress", progress.toFixed(4));
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateHero);
+    };
+    updateHero();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
   function sendMessage(text = message) {
     if (!text.trim()) return;
     setMessage("");
@@ -229,19 +267,40 @@ export function App() {
       </header>
 
       <main id="top">
-        <section className="hero">
-          <div className="tunnel" aria-hidden="true">
-            {Array.from({ length: 16 }, (_, i) => <span key={i} style={{ "--i": i }} />)}
-          </div>
-          <div className="hero-copy">
-            <p className="eyebrow">Live gallery automation</p>
-            <h1>Less admin.<br /><em style={{ fontStyle: "italic", color: "#FF7518" }}>More art.</em></h1>
-            <p className="lead">An AI automation system that connects gallery data, calendars, email, and private or commercial AI models to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
-            <div className="actions">
-              <a className="primary" href="#workflows">Explore the workflows</a>
-              <a href="https://nex3.app.n8n.cloud/home/workflows">Open Gallery AI Cloud</a>
-              <a href="https://github.com/piratesandnavy/Gallery-AI">Run on your machine</a>
-              <a href="#contact">Contact us</a>
+        <section
+          className="hero"
+          ref={heroRef}
+          onPointerMove={(event) => {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            event.currentTarget.style.setProperty("--mouse-x", `${((event.clientX - bounds.left) / bounds.width - 0.5) * 2}`);
+            event.currentTarget.style.setProperty("--mouse-y", `${((event.clientY - bounds.top) / bounds.height - 0.5) * 2}`);
+          }}
+          onPointerLeave={(event) => {
+            event.currentTarget.style.setProperty("--mouse-x", "0");
+            event.currentTarget.style.setProperty("--mouse-y", "0");
+          }}
+        >
+          <div className="hero-sticky">
+            <div className="tunnel" aria-hidden="true">
+              {Array.from({ length: 16 }, (_, i) => <span key={i} style={{ "--i": i }} />)}
+              <div className="tunnel-gallery">
+                {agents.slice(0, 8).map((agent, index) => (
+                  <figure key={agent.title} style={{ "--panel": index }}>
+                    <img src={agent.image} alt="" />
+                  </figure>
+                ))}
+              </div>
+            </div>
+            <div className="hero-copy">
+              <p className="eyebrow">Live gallery automation</p>
+              <h1>Less admin.<br /><em style={{ fontStyle: "italic", color: "#FF7518" }}>More art.</em></h1>
+              <p className="lead">An AI automation system that connects gallery data, calendars, email, and private or commercial AI models to support artist onboarding, opportunity discovery, collector assistance, and weekly reporting.</p>
+              <div className="actions">
+                <a className="primary" href="#workflows">Explore the workflows</a>
+                <a href="https://nex3.app.n8n.cloud/home/workflows">Open Gallery AI Cloud</a>
+                <a href="https://github.com/piratesandnavy/Gallery-AI">Run on your machine</a>
+                <a href="#contact">Contact us</a>
+              </div>
             </div>
           </div>
         </section>
