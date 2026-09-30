@@ -26,7 +26,7 @@ function mountCarousel() {
     <div class="eca-heading">
       <p>Seven connected roles</p>
       <h2>Built around real gallery work.</h2>
-      <span>Click a card, drag sideways, use the arrows, or wait for the carousel to move through the connected gallery workflows.</span>
+      <span>Click a card, drag sideways, or use the arrows to move through the connected gallery workflows.</span>
     </div>
     <div class="eca-stage" role="group" aria-label="Seven connected gallery roles" tabindex="0">
       <button class="eca-arrow eca-prev" type="button" aria-label="Previous agent">←</button>
@@ -40,7 +40,6 @@ function mountCarousel() {
   const ring = section.querySelector(".eca-ring");
   const dots = section.querySelector(".eca-dots");
   let active = 0;
-  let paused = false;
   let dragStart = null;
 
   const cards = agents.map((agent, index) => {
@@ -89,15 +88,11 @@ function mountCarousel() {
     if (event.key === "ArrowLeft") move(-1);
     if (event.key === "ArrowRight") move(1);
   });
-  section.addEventListener("pointerenter", () => { paused = true; });
-  section.addEventListener("pointerleave", () => { paused = false; });
-  section.addEventListener("pointerdown", (event) => { dragStart = event.clientX; paused = true; });
+  section.addEventListener("pointerdown", (event) => { dragStart = event.clientX; });
   section.addEventListener("pointerup", (event) => {
     if (dragStart !== null && Math.abs(event.clientX - dragStart) > 35) move(event.clientX < dragStart ? 1 : -1);
     dragStart = null;
-    paused = false;
   });
-  window.setInterval(() => { if (!paused && document.visibilityState === "visible") move(1); }, 4600);
   render();
   return true;
 }
