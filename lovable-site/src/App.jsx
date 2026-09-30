@@ -98,7 +98,6 @@ const integrations = {
 
 export function App() {
   const [activeAgent, setActiveAgent] = useState(0);
-  const [carouselPaused, setCarouselPaused] = useState(false);
   const dragStart = useRef(null);
   const heroRef = useRef(null);
   const [chatOpen, setChatOpen] = useState(false);
@@ -147,12 +146,6 @@ export function App() {
     if (offset < -agents.length / 2) offset += agents.length;
     return offset;
   }
-
-  useEffect(() => {
-    if (carouselPaused) return undefined;
-    const timer = window.setInterval(() => moveAgent(1), 4600);
-    return () => window.clearInterval(timer);
-  }, [carouselPaused]);
 
   useEffect(() => {
     const targets = document.querySelectorAll(".section, .privacy, .contact, footer");
@@ -276,21 +269,17 @@ export function App() {
         <section id="workflows" className="section workflows">
           <p className="eyebrow">Seven connected roles</p>
           <h2>Built around real gallery work.</h2>
-          <p className="intro">Click a card, drag sideways, use the arrows, or wait for the carousel to move through the connected gallery workflows.</p>
+          <p className="intro">Click a card, drag sideways, or use the arrows to move through the connected gallery workflows.</p>
           <div
             className="agent-stage"
             role="group"
             tabIndex="0"
             aria-label="Connected gallery agents"
-            onMouseEnter={() => setCarouselPaused(true)}
-            onMouseLeave={() => setCarouselPaused(false)}
-            onFocus={() => setCarouselPaused(true)}
-            onBlur={(event) => !event.currentTarget.contains(event.relatedTarget) && setCarouselPaused(false)}
             onKeyDown={(event) => {
               if (event.key === "ArrowLeft") moveAgent(-1);
               if (event.key === "ArrowRight") moveAgent(1);
             }}
-            onPointerDown={(event) => { dragStart.current = event.clientX; setCarouselPaused(true); }}
+            onPointerDown={(event) => { dragStart.current = event.clientX; }}
             onPointerUp={(event) => {
               if (dragStart.current !== null && Math.abs(event.clientX - dragStart.current) > 35) moveAgent(event.clientX < dragStart.current ? 1 : -1);
               dragStart.current = null;
