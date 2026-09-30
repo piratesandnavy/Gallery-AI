@@ -135,14 +135,21 @@
           });
         }
 
-        applyWorkflowCopy();
-        document.addEventListener("DOMContentLoaded", applyWorkflowCopy);
-        const observer = new MutationObserver(applyWorkflowCopy);
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-        window.setTimeout(function () {
+        function startWorkflowCopy() {
           applyWorkflowCopy();
-          observer.disconnect();
-        }, 10000);
+          const observer = new MutationObserver(applyWorkflowCopy);
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+          window.setTimeout(function () {
+            applyWorkflowCopy();
+            observer.disconnect();
+          }, 10000);
+        }
+
+        if (document.readyState === "complete") {
+          startWorkflowCopy();
+        } else {
+          window.addEventListener("load", startWorkflowCopy, { once: true });
+        }
       })();
     </script>
 <script>
