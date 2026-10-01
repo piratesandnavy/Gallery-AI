@@ -348,9 +348,18 @@ export function App() {
         </section>
 
         <section className="privacy">
-          <p className="eyebrow">Design principle</p>
-          <h2>Your gallery stays in control.</h2>
-          <p>The workflows are designed for human review, use environment-based configuration, keep credentials out of the repository, and prepare drafts before client-facing communication is sent.</p>
+          <div className="privacy-copy">
+            <p className="eyebrow">Design principle</p>
+            <h2>Your gallery stays in control.</h2>
+            <p>The workflows are designed for human review, use environment-based configuration, keep credentials out of the repository, and prepare drafts before client-facing communication is sent.</p>
+          </div>
+          <figure className="privacy-visual">
+            <img
+              src="/assets/gallery/more-time-for-art-less-admin.png"
+              alt="A gallery director walking through a warmly lit exhibition space connected by Gallery AI workflows"
+              loading="lazy"
+            />
+          </figure>
         </section>
 
         <section id="contact" className="section contact">
