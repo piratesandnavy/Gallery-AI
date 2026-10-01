@@ -7,7 +7,17 @@ function moveWorkspaceCard() {
   );
   const workspaceCard = workspaceLink?.parentElement;
 
-  if (!workspaceCard?.textContent.includes("All five agents live")) return;
+  if (!workspaceCard) return;
+
+  const workspaceCopy = workspaceCard.querySelector("p");
+  if (workspaceCopy?.textContent.includes("All five agents live")) {
+    workspaceCopy.textContent = workspaceCopy.textContent.replace(
+      "All five agents live",
+      "All seven agents live",
+    );
+  }
+
+  if (!workspaceCard.textContent.includes("All seven agents live")) return;
 
   const designLabel = Array.from(
     document.querySelectorAll("main section span"),
@@ -21,15 +31,31 @@ function moveWorkspaceCard() {
   designContainer.appendChild(workspaceCard);
 }
 
-moveWorkspaceCard();
+function updateChatAgentCopy() {
+  const oldCopy =
+    "I can explain how the four agents work, what stays on your machine, and pass your details to the team.";
+  const newCopy =
+    "I can explain how the seven agents work, what stays on your machine, and pass your details to the team.";
 
-const workspaceCardObserver = new MutationObserver(moveWorkspaceCard);
+  Array.from(document.querySelectorAll('[role="log"] p')).forEach((paragraph) => {
+    if (paragraph.textContent.trim() === oldCopy) paragraph.textContent = newCopy;
+  });
+}
+
+function applyAgentUpdates() {
+  moveWorkspaceCard();
+  updateChatAgentCopy();
+}
+
+applyAgentUpdates();
+
+const workspaceCardObserver = new MutationObserver(applyAgentUpdates);
 workspaceCardObserver.observe(document.documentElement, {
   childList: true,
   subtree: true,
 });
 
 window.setTimeout(() => {
-  moveWorkspaceCard();
+  applyAgentUpdates();
   workspaceCardObserver.disconnect();
 }, 10000);
