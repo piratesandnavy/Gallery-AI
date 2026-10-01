@@ -1,51 +1,43 @@
 # Design QA
 
-## Evidence
+- Source visual truth: `/Users/nex3ai/Downloads/More Time for Art, Less Admin (1).png`
+- Secondary layout references: user-provided screenshots showing the narrow text card and the Design Principle section
+- Implementation screenshot: `design-qa-feature.png`
+- Restored-section screenshot: `design-qa-privacy.png`
+- Viewport: 1280 × 720 CSS pixels, device scale factor 1
+- Source pixels: 1672 × 941
+- Implementation capture pixels: 1280 × 720; artwork rendered at approximately 1100 × 619 CSS pixels
+- State: desktop, artwork feature in view; Design Principle text-only state separately captured
 
-- Source visual truth: `/var/folders/3n/y5b0qdv54d59ztxg7l8flhv00000gn/T/codex-clipboard-c995a6a4-2e56-45c3-87c6-1fff9a23d7c8.png`
-- Browser-rendered desktop implementation: `qa/integration-logos-desktop.png`
-- Browser-rendered mobile implementation: `qa/integration-logos-mobile.png`
-- Combined full-view comparison: `qa/source-vs-integration-logos.png`
-- Source pixels: 2736 × 1190.
-- Desktop implementation: 1920 × 890 pixels at a 1920 × 890 CSS viewport, density 1.
-- Mobile implementation: 390 × 844 pixels at a 390 × 844 CSS viewport, density 1.
-- Comparison normalization: source contained proportionally inside a 1920 × 890 frame; implementation captured at the same comparison frame.
-- State: “The AI Gallery Operating System” section with all five integration rows visible.
+## Full-view comparison evidence
 
-## Findings
+The supplied artwork is used without recompression, stretching, or content alteration. Its original 1672:941 ratio is preserved inside a centered, responsive feature frame. The former narrow copy card is absent. The Design Principle section is restored to a single-column text layout with the artwork removed.
 
-- No actionable P0, P1, or P2 differences were found.
-- The existing card size, typography, colors, borders, shadows, timeline, top icons, feature lists, and responsive structure remain unchanged.
-- Each logo group appears after its descriptive paragraph and before its feature list.
-- All 15 placements use repository-hosted SVG files; Microsoft Outlook is reused from one asset.
-- Official logo proportions and brand colors are preserved. Neutral plates provide contrast for dark marks without recoloring them.
+## Focused-region comparison evidence
+
+The artwork source and implemented placement were displayed together in `design-qa-comparison.html`. The image crop, embedded typography, icon paths, palette, sharpness, and focal point match the source. A second focused capture confirms that the privacy section contains only its original heading, explanatory copy, and workspace card.
 
 ## Required fidelity surfaces
 
-- Fonts and typography: unchanged from the existing production cards.
-- Spacing and layout rhythm: new rows use 20px vertical margins; no outside spacing rules were modified.
-- Colors and visual tokens: existing tokens are untouched; official brand colors remain in the SVG assets.
-- Image quality and asset fidelity: official SVG assets render sharply at 26px height. The wider Google Workspace lockup is proportionally constrained to the card width.
-- Copy and content: all card descriptions and feature-list labels remain unchanged.
+- Fonts and typography: Artwork typography remains embedded in the supplied raster; page typography is unchanged.
+- Spacing and layout rhythm: Feature width is capped at 1100px with a 56px desktop top gap and a 38px mobile top gap. The restored text section retains its original vertical spacing.
+- Colors and visual tokens: Existing black, warm-gold border, and shadow tokens are retained.
+- Image quality and asset fidelity: Exact supplied 1672 × 941 image asset reused; object ratio preserved and no placeholder or generated substitute used.
+- Copy and content: The removed card copy remains present inside the supplied artwork itself; Design Principle copy is unchanged.
 
-## Responsive and interaction checks
+## Findings
 
-- Desktop: five centered logo groups rendered, 15 logo images total.
-- Mobile: rows wrap naturally and remain centered with no card overflow.
-- Hover: logo plates retain their colors and use a slight opacity/scale transition.
-- Accessibility: every row has a group label; every image has alt text, an aria-label, and lazy loading.
-- Existing production runtime emits a React hydration warning that predates this isolated enhancement; logo installation is delayed until after hydration and does not alter the React component tree.
-- Build: passed.
-- Sites worker tests: 4/4 passed.
+No actionable P0, P1, or P2 visual mismatches remain.
+
+## Console and interaction checks
+
+- Image loaded successfully.
+- Layout mutation completed and remained stable after hydration.
+- Existing navigation and chatbot trigger remain present.
+- Browser console was checked. The site still emits its pre-existing React hydration error #418; this change did not add a new console error or block the revised layout.
 
 ## Comparison history
 
-- Pass 1: the Google Workspace wordmark exceeded the narrow card width.
-- Fix: constrained the official wide lockup proportionally and allowed it to occupy its own centered flex line.
-- Pass 2: desktop and mobile captures show all logo rows contained and centered with the original card anatomy preserved.
-
-## Follow-up polish
-
-- None.
+- Initial implementation: passed the focused source/implementation comparison; no corrective iteration was required.
 
 final result: passed
