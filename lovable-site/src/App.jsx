@@ -1,5 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, BarChart3, FileText, Mail, MessageCircle, Sparkles, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BarChart3, Calendar, FileText, Mail, MessageCircle, Sparkles, X } from "lucide-react";
+
+const BOOKING_URL = "https://cal.com/purmehdi/30min";
+
+// The Cal.com embed handles clicks on [data-cal-link] itself. If its script
+// never loaded (blocked, offline), open the booking page in a new tab instead.
+function openBookingFallback() {
+  const embedReady = typeof window.Cal === "function" && Boolean(window.customElements?.get("cal-modal-box"));
+  if (!embedReady) window.open(BOOKING_URL, "_blank", "noopener,noreferrer");
+}
 
 const agents = [
   {
@@ -377,6 +386,18 @@ export function App() {
               {contactError && <p className="form-error" role="alert">{contactError}</p>}
               <div className="contact-actions">
                 <button className="contact-submit" disabled={sending}>{sending ? "Sending…" : "Send enquiry"}</button>
+                <button
+                  className="contact-submit contact-book"
+                  type="button"
+                  aria-label="Book a 30 minute discovery call"
+                  data-cal-link="purmehdi/30min"
+                  data-cal-namespace="30min"
+                  data-cal-config={JSON.stringify({ layout: "month_view", useSlotsViewOnSmallScreen: "true" })}
+                  onClick={openBookingFallback}
+                >
+                  <Calendar size={17} aria-hidden="true" />
+                  Book a Discovery Call
+                </button>
                 <button
                   className="contact-chat"
                   type="button"
