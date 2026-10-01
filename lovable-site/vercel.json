@@ -31,6 +31,10 @@
       "dest": "/api/artist-application"
     },
     {
+      "src": "/api/chat",
+      "dest": "/api/chat"
+    },
+    {
       "src": "/artist-application-submit.js",
       "dest": "/assets/artist-application-submit.js"
     },

@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import artistApplication from "./api/artist-application.mjs";
+import chat from "./api/chat.mjs";
 import contact from "./api/contact.mjs";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
@@ -103,6 +104,7 @@ export function createGalleryServer() {
     if (url.pathname === "/healthz") return sendJson(response, 200, { ok: true });
     if (url.pathname === "/api/contact") return runApiHandler(contact, request, response);
     if (url.pathname === "/api/artist-application") return runApiHandler(artistApplication, request, response);
+    if (url.pathname === "/api/chat") return runApiHandler(chat, request, response);
     if (!["GET", "HEAD"].includes(request.method)) return sendJson(response, 405, { error: "Method not allowed" });
 
     const page = pageRoutes.get(url.pathname);
