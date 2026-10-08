@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artist Submission</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: a painted canvas fills the page; one narrow column of form sits on top of it. */
+:root{
+  color-scheme:dark;
+  --ink:#14110f;
+  --panel:rgba(20,17,15,.78);
+  --line:rgba(242,238,229,.16);
+  --line-strong:rgba(242,238,229,.34);
+  --cream:#f2eee5;
+  --muted:#b9b1a3;
+  --gold:#e0b676;
+  --orange:#f47a2a;
+  --error:#ff9a8a;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--ink)}
+body{margin:0;background:var(--ink);color:var(--cream);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+#paint{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.veil{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(20,17,15,.72),rgba(20,17,15,.35) 70%,rgba(20,17,15,.2))}
+.wrap{position:relative;z-index:2;max-width:720px;margin:0 auto;padding-inline:20px;padding-block:56px 80px;display:flex;flex-direction:column;gap:36px}
+
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+header{display:flex;flex-direction:column;gap:18px;text-align:center;align-items:center}
+h1{margin:0;font:400 clamp(52px,11vw,96px)/.95 var(--serif);letter-spacing:-.025em;text-wrap:balance}
+h1 em{color:var(--orange)}
+.lede{margin:0;max-width:52ch;color:var(--cream);opacity:.86;font-size:17px}
+.meta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;font:400 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+form,.done{background:var(--panel);border:1px solid var(--line);border-radius:6px;
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+fieldset{border:0;margin:0;padding:32px 28px;display:flex;flex-direction:column;gap:24px;min-width:0}
+fieldset+fieldset{border-top:1px solid var(--line)}
+legend{float:left;width:100%;padding:0;margin:0 0 4px;font:400 32px/1.1 var(--serif);letter-spacing:-.01em}
+legend span{display:block;margin-bottom:10px;font:500 11px/1 var(--mono);letter-spacing:.3em;text-transform:uppercase;color:var(--gold)}
+legend+*{clear:both}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+label.q,.q{font-weight:500;font-size:15px}
+.req{color:var(--orange);margin-left:3px}
+.opt{color:var(--muted);font-weight:400;font-size:13px;margin-left:6px}
+.hint{margin:0;color:var(--muted);font-size:13.5px}
+input[type=text],input[type=email],input[type=url],textarea{
+  width:100%;background:rgba(242,238,229,.05);color:var(--cream);border:1px solid var(--line-strong);border-radius:4px;
+  padding:12px 14px;font:400 16px/1.4 var(--sans);transition:border-color .15s,background .15s}
+textarea{min-height:104px;resize:vertical}
+input::placeholder,textarea::placeholder{color:rgba(185,177,163,.6)}
+input:focus,textarea:focus{outline:none;border-color:var(--gold);background:rgba(242,238,229,.09)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.chip span{display:block;padding:8px 14px;border:1px solid var(--line-strong);border-radius:999px;font-size:14px;color:var(--cream);transition:all .15s}
+.chip:hover span{border-color:var(--cream)}
+.chip input:checked+span{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:500}
+.chip input:focus-visible+span{outline:2px solid var(--cream);outline-offset:2px}
+.other{max-width:320px}
+.err{margin:0;color:var(--error);font-size:13.5px}
+.invalid input[type=text],.invalid input[type=email],.invalid input[type=url],.invalid textarea{border-color:var(--error)}
+.actions{padding:24px 28px 28px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+button{font:600 15px/1 var(--sans);padding:15px 26px;border-radius:999px;border:0;background:var(--gold);color:var(--ink);cursor:pointer;transition:transform .15s,background .15s}
+button:hover{background:#ecc78e;transform:translateY(-1px)}
+button:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+button[disabled]{opacity:.6;cursor:default;transform:none}
+.note{margin:0;color:var(--muted);font-size:13.5px;flex:1 1 220px}
+.done{padding:56px 28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.done h2{margin:0;font:400 clamp(40px,8vw,60px)/1 var(--serif);letter-spacing:-.02em}
+.done h2 em{color:var(--orange)}
+.done p{margin:0;max-width:46ch;opacity:.86}
+[hidden]{display:none!important}
+iframe[name=sink]{display:none}
+@media (max-width:560px){.row{grid-template-columns:1fr}fieldset{padding:26px 18px}.actions{padding:20px 18px 24px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="paint" aria-hidden="true"></canvas>
+<div class="veil"></div>
+
+<main class="wrap">
+  <header>
+    <div class="eyebrow">Open call for artists</div>
+    <h1>Show us <em>your work.</em></h1>
+    <p class="lede">We welcome submissions from emerging and established artists working across all media. Tell us a little about yourself and share a link to your portfolio.</p>
+    <div class="meta"><span>Under 5 minutes</span><span>All media welcome</span><span>Every submission reviewed</span></div>
+  </header>
+
+  <form id="f" method="POST" target="sink" novalidate>
+    <fieldset>
+      <legend><span>Part one</span>About you</legend>
+      <div class="row">
+        <div class="field" data-req>
+          <label class="q" for="name">Artist name<span class="req">*</span></label>
+          <input id="name" type="text" name="entry.1380731460" autocomplete="name">
+        </div>
+        <div class="field" data-req data-type="email">
+          <label class="q" for="email">Email address<span class="req">*</span></label>
+          <input id="email" type="email" name="entry.259846007" autocomplete="email">
+        </div>
+      </div>
+      <div class="field">
+        <label class="q" for="loc">Location<span class="opt">City, Country</span></label>
+        <input id="loc" type="text" name="entry.1337677751" autocomplete="address-level2">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span>Part two</span>Your practice</legend>
+      <div class="field" data-req data-group="entry.2086337621" id="g-medium">
+        <div class="q">Primary medium<span class="req">*</span><span class="opt">Select all that apply</span></div>
+        <div class="chips"></div>
+      </div>
+      <div class="field" data-req data-group="entry.679178349" id="g-style">
+        <div class="q">Artistic style<span class="req">*</span><span class="opt">Select all that apply</span></div>
+        <div class="chips"></div>
+      </div>
+      <div class="field" data-req data-type="url">
+        <label class="q" for="link">Portfolio link<span class="req">*</span></label>
+        <p class="hint">Website, Instagram, or a shared folder.</p>
+        <input id="link" type="url" name="entry.2136563526" placeholder="https://" inputmode="url">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span>Part three</span>Your story</legend>
+      <div class="field" data-req>
+        <label class="q" for="about">About you and your work<span class="req">*</span></label>
+        <p class="hint">In 3 to 5 sentences, tell us who you are and what your work explores. No formal statement needed.</p>
+        <textarea id="about" name="entry.1848425997"></textarea>
+      </div>
+      <div class="field">
+        <label class="q" for="cv">CV or exhibition highlights<span class="opt">Optional</span></label>
+        <p class="hint">Paste a link to your CV, or list up to three recent exhibitions or awards.</p>
+        <textarea id="cv" name="entry.886967545" style="min-height:76px"></textarea>
+      </div>
+      <div class="field">
+        <label class="q" for="notes">Anything else you would like us to know?<span class="opt">Optional</span></label>
+        <textarea id="notes" name="entry.1222774990" style="min-height:76px"></textarea>
+      </div>
+    </fieldset>
+
+    <input type="hidden" name="pageHistory" value="0,1,2">
+    <div class="actions">
+      <button id="send" type="submit">Submit your work</button>
+      <p class="note" id="status">Our curatorial team reviews every submission.</p>
+    </div>
+  </form>
+
+  <section class="done" id="done" hidden tabindex="-1">
+    <div class="eyebrow">Submission received</div>
+    <h2>Thank <em>you.</em></h2>
+    <p>Our curatorial team reviews every submission and will be in touch by email if your practice is a fit for an upcoming exhibition.</p>
+  </section>
+</main>
+<iframe name="sink" id="sink" title="Submission target"></iframe>
+
+<script>
+/* ---------- Where submissions go ----------
+   Answers are posted to the Google Form, so they land in its Responses tab.
+   The Google Form must be PUBLISHED for this to work. If submissions do not
+   arrive, replace FORM_ACTION with the published form's link, changing the
+   ending "/viewform" to "/formResponse". */
+var FORM_ACTION = "https://docs.google.com/forms/d/1J8_Ca37z7BM8S8eDj0It5N2mIOZI_Toyx3Z9ENE0uqM/formResponse";
+
+var MEDIUMS = ["Painting","Drawing / Illustration","Sculpture","Photography","Printmaking","Mixed Media","Digital / New Media","Textile / Fibre","Ceramics","Installation"];
+var STYLES  = ["Abstract","Figurative","Realism","Impressionism","Expressionism","Contemporary","Minimalism","Conceptual","Surrealism","Pop / Street Art"];
+
+function buildChips(groupId, options){
+  var g = document.getElementById(groupId), name = g.dataset.group, box = g.querySelector(".chips");
+  options.concat(["Other"]).forEach(function(label, i){
+    var isOther = i === options.length;
+    var l = document.createElement("label"); l.className = "chip";
+    var c = document.createElement("input"); c.type = "checkbox"; c.name = name;
+    c.id = groupId + "-" + i; c.value = isOther ? "__other_option__" : label;
+    var s = document.createElement("span"); s.textContent = label;
+    l.appendChild(c); l.appendChild(s); box.appendChild(l);
+    if (isOther){
+      var t = document.createElement("input"); t.type = "text"; t.className = "other"; t.hidden = true;
+      t.id = groupId + "-other"; t.name = name + ".other_option_response"; t.placeholder = "Please specify";
+      t.setAttribute("aria-label", "Other, please specify"); t.disabled = true;
+      g.appendChild(t);
+      c.addEventListener("change", function(){ t.hidden = !c.checked; t.disabled = !c.checked; if (c.checked) t.focus(); });
+    }
+  });
+}
+buildChips("g-medium", MEDIUMS);
+buildChips("g-style", STYLES);
+
+var form = document.getElementById("f"), sink = document.getElementById("sink");
+var statusEl = document.getElementById("status"), sendBtn = document.getElementById("send");
+var defaultStatus = statusEl.textContent, sent = false;
+form.action = FORM_ACTION;
+
+function setError(field, msg){
+  var old = field.querySelector(".err"); if (old) old.remove();
+  field.classList.toggle("invalid", !!msg);
+  if (msg){ var p = document.createElement("p"); p.className = "err"; p.textContent = msg; field.appendChild(p); }
+}
+function check(field){
+  var msg = "";
+  if (field.dataset.group){
+    var boxes = field.querySelectorAll("input[type=checkbox]"), any = false, other = field.querySelector(".other");
+    boxes.forEach(function(b){ if (b.checked) any = true; });
+    if (!any) msg = "Choose at least one.";
+    else if (other && !other.disabled && !other.value.trim()) msg = "Tell us what “Other” is.";
+  } else {
+    var el = field.querySelector("input,textarea"), v = el.value.trim();
+    if (!v) msg = "This one is required.";
+    else if (field.dataset.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) msg = "Enter a valid email address.";
+    else if (field.dataset.type === "url"){
+      if (!/^https?:\/\//i.test(v)) { v = "https://" + v; el.value = v; }
+      try { var u = new URL(v); if (u.hostname.indexOf(".") < 0) throw 0; } catch(e){ msg = "Enter a full link, such as https://yourname.com"; }
+    }
+  }
+  setError(field, msg);
+  return !msg;
+}
+form.querySelectorAll("[data-req]").forEach(function(field){
+  field.addEventListener("change", function(){ if (field.classList.contains("invalid")) check(field); });
+});
+
+form.addEventListener("submit", function(e){
+  var firstBad = null;
+  form.querySelectorAll("[data-req]").forEach(function(field){ if (!check(field) && !firstBad) firstBad = field; });
+  if (firstBad){
+    e.preventDefault();
+    statusEl.textContent = "Please complete the highlighted fields.";
+    firstBad.scrollIntoView({behavior:"smooth", block:"center"});
+    var focusable = firstBad.querySelector("input:not([hidden]),textarea"); if (focusable) focusable.focus({preventScroll:true});
+    return;
+  }
+  sent = true; sendBtn.disabled = true; sendBtn.textContent = "Sending…"; statusEl.textContent = defaultStatus;
+});
+sink.addEventListener("load", function(){
+  if (!sent) return;
+  form.hidden = true;
+  var done = document.getElementById("done"); done.hidden = false; done.focus();
+  done.scrollIntoView({behavior:"smooth", block:"center"});
+});
+
+/* ---------- Painted background ---------- */
+(function(){
+  var cv = document.getElementById("paint"), ctx = cv.getContext("2d");
+  var seed = 11;
+  function rnd(){ seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  function stroke(w, h, color, pts, width){
+    var bristles = Math.round(width / 1.6);
+    for (var b = 0; b < bristles; b++){
+      var off = (b / bristles - .5) * width, wob = rnd() * 6, alpha = .10 + rnd() * .5;
+      if (rnd() < .12) continue;
+      ctx.beginPath(); ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.lineWidth = 1 + rnd() * 2.4;
+      var start = rnd() * .08, end = 1 - rnd() * .18;
+      for (var t = start; t <= end; t += .012){
+        var a = 1 - t, x = a*a*a*pts[0] + 3*a*a*t*pts[2] + 3*a*t*t*pts[4] + t*t*t*pts[6];
+        var y = a*a*a*pts[1] + 3*a*a*t*pts[3] + 3*a*t*t*pts[5] + t*t*t*pts[7];
+        var taper = Math.sin(Math.PI * Math.min(1, t * 1.15)) * .5 + .5;
+        var py = y * h + off * taper + Math.sin(t * 9 + b) * wob;
+        if (t === start) ctx.moveTo(x * w, py); else ctx.lineTo(x * w, py);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function draw(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2), w = window.innerWidth, h = window.innerHeight;
+    cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seed = 11;
+    ctx.fillStyle = "#14110f"; ctx.fillRect(0, 0, w, h);
+    /* gallery-room perspective lines */
+    ctx.strokeStyle = "rgba(242,238,229,.07)"; ctx.lineWidth = 1;
+    var cx = w / 2, cy = h * .42, rw = Math.min(w * .28, 300), rh = rw * .55;
+    ctx.strokeRect(cx - rw, cy - rh, rw * 2, rh * 2);
+    [[0,0,cx-rw,cy-rh],[w,0,cx+rw,cy-rh],[0,h,cx-rw,cy+rh],[w,h,cx+rw,cy+rh]].forEach(function(l){
+      ctx.beginPath(); ctx.moveTo(l[0], l[1]); ctx.lineTo(l[2], l[3]); ctx.stroke();
+    });
+    var s = Math.max(60, Math.min(w, h) * .16);
+    stroke(w, h, "#6d4bd1", [-.05,.10, .12,.02, .26,.22, .44,.09], s);
+    stroke(w, h, "#e0b676", [.62,.06, .78,.20, .88,-.02, 1.06,.14], s * .85);
+    stroke(w, h, "#f47a2a", [-.06,.62, .14,.44, .22,.78, .40,.58], s * 1.1);
+    stroke(w, h, "#2f8f9d", [.70,.50, .82,.40, .90,.60, 1.05,.48], s * .7);
+    stroke(w, h, "#c2386b", [.58,.94, .74,.76, .88,1.02, 1.06,.82], s);
+    stroke(w, h, "#f2eee5", [.04,.36, .10,.30, .16,.40, .24,.34], s * .22);
+    stroke(w, h, "#e0b676", [-.04,.96, .10,.88, .20,1.0, .34,.92], s * .5);
+  }
+  draw();
+  var timer; window.addEventListener("resize", function(){ clearTimeout(timer); timer = setTimeout(draw, 150); });
+})();
+</script>
+</body>
+</html>
