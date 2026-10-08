@@ -151,6 +151,8 @@ iframe[name=sink]{display:none}
     </fieldset>
 
     <input type="hidden" name="pageHistory" value="0,1,2">
+    <!-- Spam trap for the email endpoint. No name attribute, so it is never sent to the Google Form. -->
+    <input id="hp" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
     <div class="actions">
       <button id="send" type="submit">Submit your work</button>
       <p class="note" id="status">Our curatorial team reviews every submission.</p>
@@ -241,7 +243,38 @@ form.addEventListener("submit", function(e){
     return;
   }
   sent = true; sendBtn.disabled = true; sendBtn.textContent = "Sending…"; statusEl.textContent = defaultStatus;
+  sendEmails();
 });
+
+/* ---------- Emails ----------
+   The Google Form only stores the answers. This second request asks the site's
+   own endpoint to email the full submission to the gallery and a confirmation
+   to the artist. It never blocks or fails the submission itself. */
+var EMAIL_ENDPOINT = "/api/artist-submission";
+function picked(groupId){
+  var g = document.getElementById(groupId), out = [];
+  g.querySelectorAll("input[type=checkbox]:checked").forEach(function(b){
+    if (b.value === "__other_option__"){ var o = g.querySelector(".other").value.trim(); if (o) out.push("Other: " + o); }
+    else out.push(b.value);
+  });
+  return out;
+}
+function val(id){ return document.getElementById(id).value.trim(); }
+function sendEmails(){
+  try {
+    fetch(EMAIL_ENDPOINT, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      keepalive: true,
+      body: JSON.stringify({
+        name: val("name"), email: val("email"), location: val("loc"),
+        mediums: picked("g-medium"), styles: picked("g-style"),
+        portfolio: val("link"), about: val("about"), cv: val("cv"), notes: val("notes"),
+        companyWebsite: val("hp")
+      })
+    }).catch(function(){});
+  } catch (err) {}
+}
 sink.addEventListener("load", function(){
   if (!sent) return;
   form.hidden = true;
