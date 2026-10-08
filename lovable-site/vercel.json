@@ -51,6 +51,10 @@
       "dest": "/live-artist-application.html"
     },
     {
+      "src": "/artist-submission(?:\\.html)?/?",
+      "dest": "/artist-submission.html"
+    },
+    {
       "src": "/favicon.ico",
       "dest": "/favicon.ico"
     },
