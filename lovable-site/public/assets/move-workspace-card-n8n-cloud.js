@@ -19,6 +19,19 @@ function moveWorkspaceCard() {
 
   if (!workspaceCard.textContent.includes("All seven agents live")) return;
 
+  // Compact bar: match the paragraph width (max-w-2xl) with tighter spacing.
+  Object.assign(workspaceCard.style, {
+    maxWidth: "42rem",
+    padding: "0.75rem 1.25rem",
+    gap: "0.75rem",
+  });
+  if (workspaceCopy) workspaceCopy.style.fontSize = "0.8125rem";
+  Object.assign(workspaceLink.style, {
+    padding: "0.5rem 1rem",
+    fontSize: "0.8125rem",
+    whiteSpace: "nowrap",
+  });
+
   const designLabel = Array.from(
     document.querySelectorAll("main section span"),
   ).find(
