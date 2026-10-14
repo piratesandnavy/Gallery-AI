@@ -40,8 +40,9 @@ function installWalkthroughStyles() {
     @media (min-width: 1024px) {
       .privacy-copy-only.privacy-with-video,
       .privacy-with-video {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-        gap: 56px;
+        max-width: 1320px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+        gap: 48px;
       }
     }
 
