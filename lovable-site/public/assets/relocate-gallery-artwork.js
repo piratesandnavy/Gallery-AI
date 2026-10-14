@@ -91,3 +91,5 @@ window.setTimeout(() => {
   placeArtwork();
   artworkObserver.disconnect();
 }, 10000);
+
+import("/assets/privacy-walkthrough-video.js");
